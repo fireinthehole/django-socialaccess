@@ -21,13 +21,9 @@ Installation
 2. Add the application to your Django INSTALLED_APPS in settings.py
 
     INSTALLED_APPS = (
-
     ...
-
     'socialaccess',
-
     ...
-
     )
 
 3. Add your keys/secrets from the sites to connect from in your settings.py
@@ -69,4 +65,4 @@ Installation
     GITHUB_CONNECT_IMAGE = 
 
 No other settings are required. 
-The rest of thr settings, such as custom authentication backends and OAuth servers request/access token urls are loaded implicitely into the settings.py
+The rest of the settings, such as custom authentication backends and OAuth servers request/access token urls are loaded implicitely into the settings.py
