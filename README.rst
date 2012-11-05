@@ -72,3 +72,18 @@ Installation
 
 No other settings are required. 
 The rest of the settings, such as custom authentication backends and OAuth servers request/access token urls are loaded implicitely into the settings.py
+
+4. Create the extended profiles
+    python manage.py syncdb
+
+5. The authentication is working by simply adding a tag from the following list inside your login page template. 
+
+    {% connect_button google %}
+
+    {% connect_button facebook %}
+
+    {% connect_button linkedin %}
+
+    {% connect_button twitter %}
+
+    {% connect_button github %}
