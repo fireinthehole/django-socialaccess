@@ -29,24 +29,39 @@ Installation
 3. Add your keys/secrets from the sites to connect from in your settings.py
 
     LINKEDIN_KEY           = 'app key'
+
     LINKEDIN_SECRET        = 'secret'
+
     LINKEDIN_CONNECT_IMAGE = 'an url to a connect icon'
 
+
     FACEBOOK_KEY           = ...
+
     FACEBOOK_SECRET        = ..
+
     FACEBOOK_CONNECT_IMAGE = .
 
+
     TWITTER_KEY           = 
+
     TWITTER_SECRET        = 
+
     TWITTER_CONNECT_IMAGE = 
 
+
     GOOGLE_KEY           = 
+
     GOOGLE_SECRET        = 
+
     GOOGLE_EMAIL_ADDR    = 
+
     GOOGLE_CONNECT_IMAGE = 
 
+
     GITHUB_KEY           = 
+
     GITHUB_SECRET        = 
+    
     GITHUB_CONNECT_IMAGE = 
 
 No other settings are required. Custom authentication backends and OAuth servers request/access token urls are loaded implicitely into your settings.
