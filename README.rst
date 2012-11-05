@@ -9,7 +9,9 @@ Django socialaccess permits user authentication and api access to a limited list
 Requirements
 ============
 Django >= 1.4
+
 oauth2 1.5.211
+
 lxml 3.0.1
 
 Installation
@@ -19,6 +21,7 @@ Installation
     pip install git+https://github.com/fireinthehole/django-socialaccess.git
 
     or clone it:
+
     git clone git://github.com/fireinthehole/django-socialaccess.git
 
 2. Add the application to your Django INSTALLED_APPS in settings.py
