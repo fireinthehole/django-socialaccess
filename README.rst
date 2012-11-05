@@ -1,9 +1,10 @@
-=================
+===================
 Django Socialaccess
-=================
+===================
+
 This application is an OAuth based client for Django sites. It is powered by the python oauth2 client implementation and supports both the oauth and the oauth2 versions.
 Django socialaccess permits user authentication and api access to a limited list of oauth servers and their apis.
-----------------------------------------------------------
+
 
 Requirements
 ============
