@@ -16,6 +16,9 @@ Installation
 ============
 1. Get and install
 
+    pip install git+https://github.com/fireinthehole/django-socialaccess.git
+
+    or clone it:
     git clone git://github.com/fireinthehole/django-socialaccess.git
 
 2. Add the application to your Django INSTALLED_APPS in settings.py
