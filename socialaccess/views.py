@@ -32,7 +32,7 @@ class OAuthConnect(View):
             Build the authorization url
         """
         request_token = self.request.session.get('request_token', None)
-        oauth_token   = request_token['oauth_token'] if request_token else None
+        oauth_token = request_token['oauth_token'] if request_token else None
         if isinstance(self.client, OAuth1Client):
             return self.client.get_authorize_url(oauth_token)
         return self.client.get_authorize_url()
@@ -46,12 +46,12 @@ class OAuthConnect(View):
 
 
 class OAuthCallback(View):
-    client              = None
+    client = None
     oauth_verifier_name = None
 
     def get(self, request):
         oauth_verifier = request.GET.get(self.oauth_verifier_name)
-        request_token  = request.session.get('request_token', None)
+        request_token  = request.session.get('request_token')
         
         try:
             if isinstance(self.client, OAuth1Client):
@@ -77,10 +77,7 @@ class LinkedinConnect(OAuthConnect):
     client = OAuthLinkedIn()
 
     def request_code(self):
-        try:
-            self.request.session['request_token'] = self.client.get_request_token({'oauth_callback': self.client.oauth_callback_url})
-        except Exception, e:
-            raise e
+        self.request.session['request_token'] = self.client.get_request_token({'oauth_callback': self.client.oauth_callback_url})
 
 
 class LinkedinCallback(OAuthCallback, LinkedinMixin):
@@ -101,10 +98,7 @@ class TwitterConnect(OAuthConnect):
     client = OAuthTwitter()
 
     def request_code(self):
-        try:
-            self.request.session['request_token'] = self.client.get_request_token({'oauth_callback': self.client.oauth_callback_url})
-        except Exception, e:
-            raise e
+        self.request.session['request_token'] = self.client.get_request_token({'oauth_callback': self.client.oauth_callback_url})
 
 
 class TwitterCallback(OAuthCallback, TwitterMixin):
