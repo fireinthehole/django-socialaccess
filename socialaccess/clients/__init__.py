@@ -9,9 +9,9 @@ from django.contrib.sites.models import Site
 
 class OAuthBaseClient(object):
     def __init__(self, callback_uri): 
-        current_site            = Site.objects.get_current()
-        protocol                = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
-        site_url                = u"%s://%s" % (protocol, current_site.domain)
+        current_site = Site.objects.get_current()
+        protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
+        site_url = u"%s://%s" % (protocol, current_site.domain)
         self.oauth_callback_url = u"%s/%s" % (site_url, callback_uri)
 
 
@@ -54,10 +54,10 @@ class OAuth1Client(OAuthBaseClient):
 
 
     def get_access_token(self, oauth_verifier, oauth_token, oauth_token_secret):
-        token             = oauth.Token(oauth_token, oauth_token_secret)
+        token = oauth.Token(oauth_token, oauth_token_secret)
         token.set_verifier(oauth_verifier)
         self.client.token = token
-        resp, content     = self.client.request(self.access_token_url, "POST")
+        resp, content = self.client.request(self.access_token_url, "POST")
         if resp['status'] != '200':
             raise Exception("Invalid response %s." % resp['status'])
         return dict(urlparse.parse_qsl(content))
