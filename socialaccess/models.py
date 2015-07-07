@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.conf import settings
 from django.db import models
 
 
 
 class OAuthProfile(models.Model):
-    user = models.OneToOneField(User, related_name='oauth_profile')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='oauth_profile')
     site = models.ForeignKey(Site, default=Site.objects.get_current)
     oauth_token = models.CharField(max_length=255)#, editable=False)
 
