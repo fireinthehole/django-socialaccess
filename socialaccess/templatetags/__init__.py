@@ -10,19 +10,19 @@ class ConnectButton(Node):
     
     def render(self, context):
         if self.site_name == 'facebook':
-            template_name = 'facebook/connect_button.html'
+            template_name = 'socialaccess/facebook/connect_button.html'
             image_url = getattr(settings, 'FACEBOOK_CONNECT_IMAGE', '')
         elif self.site_name == 'linkedin':
-            template_name = 'linkedin/connect_button.html'
+            template_name = 'socialaccess/linkedin/connect_button.html'
             image_url = getattr(settings, 'LINKEDIN_CONNECT_IMAGE', '')
         elif self.site_name == 'twitter':
-            template_name = 'twitter/connect_button.html'
+            template_name = 'socialaccess/twitter/connect_button.html'
             image_url = getattr(settings, 'TWITTER_CONNECT_IMAGE', '')
         elif self.site_name == 'google':
-            template_name = 'google/connect_button.html'
+            template_name = 'socialaccess/google/connect_button.html'
             image_url = getattr(settings, 'GOOGLE_CONNECT_IMAGE', '')
         elif self.site_name == 'github':
-            template_name = 'github/connect_button.html'
+            template_name = 'socialaccess/github/connect_button.html'
             image_url = getattr(settings, 'GITHUB_CONNECT_IMAGE', '')
         else:
             return ''
