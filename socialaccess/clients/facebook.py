@@ -19,7 +19,7 @@ class OAuthFacebook(OAuth2Client):
         self.access_token_url = getattr(settings, 'FACEBOOK_ACCESS_TOKEN_URL','https://graph.facebook.com/oauth/access_token')
     
 
-    def get_authorize_url(self, scope='email, read_stream,user_photos,user_videos,publish_stream'):
+    def get_authorize_url(self, scope='email, read_stream,user_photos,user_videos'):
         return super(OAuthFacebook, self).get_authorize_url(scope=scope)
     
 

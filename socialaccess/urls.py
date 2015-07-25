@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
 
 from socialaccess.views import LinkedinConnect, LinkedinCallback, \
                                FacebookConnect, FacebookCallback, \
@@ -7,7 +7,7 @@ from socialaccess.views import LinkedinConnect, LinkedinCallback, \
                                GithubConnect, GithubCallback
 
 
-urlpatterns = patterns('socialaccess.views',
+urlpatterns = [
     url(r'^fblogin/$', FacebookConnect.as_view(), name='fb_connect'),
     url(r'^fbcallback/$', FacebookCallback.as_view(), name='fb_callback'),
 
@@ -22,4 +22,4 @@ urlpatterns = patterns('socialaccess.views',
 
     url(r'^githublogin/$', GithubConnect.as_view(), name='github_connect'),
     url(r'^githubcallback/$', GithubCallback.as_view(), name='github_callback'),
-)
+]

@@ -8,7 +8,7 @@ Django socialaccess permits user authentication and api access to a limited list
 
 Requirements
 ============
-Django >= 1.4
+Django >= 1.8
 
 oauth2 1.5.211
 

@@ -18,10 +18,9 @@ class LinkedinMixin(object):
 
 class FacebookMixin(object):
     def create_profile(self, user_data, access_token):
-        user = User(username   = user_data['username'], 
+        user = User(email      = user_data['email'], 
                     first_name = user_data['first_name'],
-                    last_name  = user_data['last_name'],
-                    email      = user_data['email'])
+                    last_name  = user_data['last_name'])
         user.save()
         profile = FacebookProfile(user=user, 
                                   site=Site.objects.get_current(),

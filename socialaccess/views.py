@@ -1,6 +1,6 @@
 from django.views.generic.base import View
 from django.shortcuts import redirect
-from django.http import Http404
+from django.http import HttpResponse
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login
@@ -15,7 +15,7 @@ from socialaccess.mixins import LinkedinMixin, FacebookMixin, TwitterMixin, Goog
 
 
 
-#TODO: handle token expiration/renewing
+#TODO: handle token storage & renewing
 
 class OAuthConnect(View):
     client = None
@@ -41,8 +41,8 @@ class OAuthConnect(View):
         try:
             self.request_code()
             return redirect(self.authorize_url)
-        except:
-            raise Http404
+        except Exception, e:
+            return HttpResponse('Unauthorized: %s'%e.message, status=401)
 
 
 class OAuthCallback(View):
@@ -61,8 +61,7 @@ class OAuthCallback(View):
                 
             user_data = self.client.get_profile_info(access_token)
         except Exception, e:
-            #print str(e)
-            raise Http404
+            return HttpResponse('Unauthorized: %s'%e.message, status=401)
 
         user = self.client.authenticate(user_data['id'])
         if user is None:
