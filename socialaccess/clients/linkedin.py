@@ -13,13 +13,21 @@ from socialaccess.clients import OAuth1Client
 
 class OAuthLinkedIn(OAuth1Client):
     def __init__(self, callback_uri='socialaccess/linkedincallback'):
+        try:
+            app_key = getattr(settings, 'LINKEDIN_KEY')
+            app_secret = getattr(settings, 'LINKEDIN_SECRET')
+            app_request_token_url = getattr(settings, 'LINKEDIN_REQUEST_TOKEN_URL')
+            app_authorize_url     = getattr(settings, 'LINKEDIN_AUTHORIZE_URL')
+            app_access_token_url  = getattr(settings, 'LINKEDIN_ACCESS_TOKEN_URL')
+        except AttributeError:
+            raise Exception('One of these parameters is missing in settings.py: '\
+                            'LINKEDIN_KEY / LINKEDIN_SECRET / LINKEDIN_REQUEST_TOKEN_URL / LINKEDIN_AUTHORIZE_URL / LINKEDIN_ACCESS_TOKEN_URL')
+
         OAuth1Client.__init__(self, callback_uri)
-        self.client             = oauth.Client(oauth.Consumer(
-                                                        getattr(settings, 'LINKEDIN_KEY', ''),
-                                                        getattr(settings, 'LINKEDIN_SECRET', '')))
-        self.request_token_url  = getattr(settings, 'LINKEDIN_REQUEST_TOKEN_URL', 'https://api.linkedin.com/uas/oauth/requestToken')
-        self.authorize_url      = getattr(settings, 'LINKEDIN_AUTHORIZE_URL', 'https://api.linkedin.com/uas/oauth/authorize')
-        self.access_token_url   = getattr(settings, 'LINKEDIN_ACCESS_TOKEN_URL','https://api.linkedin.com/uas/oauth/accessToken')
+        self.client            = oauth.Client(oauth.Consumer(app_key, app_secret))
+        self.request_token_url = app_request_token_url
+        self.authorize_url     = app_authorize_url
+        self.access_token_url  = app_access_token_url
 
     
     def get_profile_info(self, access_token):

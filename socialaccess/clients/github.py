@@ -12,11 +12,18 @@ from socialaccess.clients import OAuth2Client
 class OAuthGithub(OAuth2Client):
     def __init__(self, callback_uri='socialaccess/fbcallback'):
         OAuth2Client.__init__(self, callback_uri)
-        self.client  = oauth.Client(oauth.Consumer(
-                                                    getattr(settings, 'GITHUB_KEY', ''),
-                                                    getattr(settings, 'GITHUB_SECRET', '')))
-        self.request_code_url = getattr(settings, 'GITHUB_REQUEST_CODE_URL', '')
-        self.access_token_url = getattr(settings, 'GITHUB_ACCESS_TOKEN_URL', '')
+        try:
+            app_key = getattr(settings, 'GITHUB_KEY')
+            app_secret = getattr(settings, 'GITHUB_SECRET')
+            app_request_code_url = getattr(settings, 'GITHUB_REQUEST_CODE_URL')
+            app_access_token_url = getattr(settings, 'GITHUB_ACCESS_TOKEN_URL')
+        except AttributeError:
+            raise Exception('One of these parameters is missing in settings.py: '\
+                            'GITHUB_KEY / GITHUB_SECRET / GITHUB_REQUEST_CODE_URL / GITHUB_ACCESS_TOKEN_URL')
+
+        self.client  = oauth.Client(oauth.Consumer(app_key, app_secret))
+        self.request_code_url = app_request_code_url
+        self.access_token_url = app_access_token_url
     
 
     def get_authorize_url(self, scope='user,public_repo'):

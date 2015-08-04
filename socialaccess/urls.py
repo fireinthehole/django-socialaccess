@@ -1,10 +1,10 @@
 from django.conf.urls import url
 
-from socialaccess.views import LinkedinConnect, LinkedinCallback, \
-                               FacebookConnect, FacebookCallback, \
-                               TwitterConnect, TwitterCallback, \
-                               GoogleConnect, GoogleCallback, \
-                               GithubConnect, GithubCallback
+from socialaccess.views import (LinkedinConnect, LinkedinCallback, \
+                                FacebookConnect, FacebookCallback, \
+                                TwitterConnect, TwitterCallback, \
+                                GoogleConnect, GoogleCallback, \
+                                GithubConnect, GithubCallback)
 
 
 urlpatterns = [

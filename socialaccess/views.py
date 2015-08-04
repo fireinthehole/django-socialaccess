@@ -12,17 +12,18 @@ from socialaccess.clients.twitter import OAuthTwitter
 from socialaccess.clients.google import OAuthGoogle
 from socialaccess.clients.github import OAuthGithub
 from socialaccess.mixins import LinkedinMixin, FacebookMixin, TwitterMixin, GoogleMixin, GithubMixin
+from socialaccess.exceptions import NotAllowedException
 
 
 
 #TODO: handle token storage & renewing
 
-class OAuthConnect(View):
-    client = None
+class AbstractOAuthConnect(View):
+    client_class = None
 
     def request_code(self):
         """
-            Get the request_token if the protocol of OAuthConnect subclasses needs it and put it into the request session
+            Get the request_token if the protocol of AbstractOAuthConnect subclasses needs it and put it into the request session
         """
         pass
 
@@ -33,93 +34,104 @@ class OAuthConnect(View):
         """
         request_token = self.request.session.get('request_token', None)
         oauth_token = request_token['oauth_token'] if request_token else None
-        if isinstance(self.client, OAuth1Client):
-            return self.client.get_authorize_url(oauth_token)
-        return self.client.get_authorize_url()
+        client = self.client_class()
+
+        if isinstance(client, OAuth1Client):
+            return client.get_authorize_url(oauth_token)
+        return client.get_authorize_url()
 
     def get(self, request):
         try:
             self.request_code()
             return redirect(self.authorize_url)
-        except Exception, e:
+        except NotAllowedException, e:
             return HttpResponse('Unauthorized: %s'%e.message, status=401)
 
 
-class OAuthCallback(View):
-    client = None
+class AbstractOAuthCallback(View):
+    client_class = None
     oauth_verifier_name = None
 
     def get(self, request):
         oauth_verifier = request.GET.get(self.oauth_verifier_name)
         request_token  = request.session.get('request_token')
+        client = self.client_class()
         
         try:
-            if isinstance(self.client, OAuth1Client):
-                access_token = self.client.get_access_token(oauth_verifier, request_token['oauth_token'], request_token['oauth_token_secret'])
+            if isinstance(client, OAuth1Client):
+                access_token = client.get_access_token(oauth_verifier, request_token['oauth_token'], request_token['oauth_token_secret'])
             else:
-                access_token = self.client.get_access_token(oauth_verifier)
+                access_token = client.get_access_token(oauth_verifier)
                 
-            user_data = self.client.get_profile_info(access_token)
+            user_data = client.get_profile_info(access_token)
         except Exception, e:
+            raise e
             return HttpResponse('Unauthorized: %s'%e.message, status=401)
 
-        user = self.client.authenticate(user_data['id'])
+        user = client.authenticate(user_data['id'])
         if user is None:
             self.create_profile(user_data, access_token)
-            user = self.client.authenticate(user_data['id'])
+            user = client.authenticate(user_data['id'])
         
         login(request, user)
         return redirect(reverse('home'))
 
 
-class LinkedinConnect(OAuthConnect):
-    client = OAuthLinkedIn()
+class LinkedinConnect(AbstractOAuthConnect):
+    client_class = OAuthLinkedIn
 
     def request_code(self):
-        self.request.session['request_token'] = self.client.get_request_token({'oauth_callback': self.client.oauth_callback_url})
+        try:
+            client = LinkedinConnect.client_class()
+            self.request.session['request_token'] = client.get_request_token({'oauth_callback': client.oauth_callback_url})
+        except Exception as e:
+            raise NotAllowedException(e.message)
 
 
-class LinkedinCallback(OAuthCallback, LinkedinMixin):
-    client = OAuthLinkedIn()
+class LinkedinCallback(AbstractOAuthCallback, LinkedinMixin):
+    client_class = OAuthLinkedIn
     oauth_verifier_name = 'oauth_verifier'
 
 
-class FacebookConnect(OAuthConnect):
-    client = OAuthFacebook()
+class FacebookConnect(AbstractOAuthConnect):
+    client_class = OAuthFacebook
 
 
-class FacebookCallback(OAuthCallback, FacebookMixin):
-    client = OAuthFacebook()
+class FacebookCallback(AbstractOAuthCallback, FacebookMixin):
+    client_class = OAuthFacebook
     oauth_verifier_name = 'code'
 
 
-class TwitterConnect(OAuthConnect):
-    client = OAuthTwitter()
+class TwitterConnect(AbstractOAuthConnect):
+    client_class = OAuthTwitter
 
     def request_code(self):
-        self.request.session['request_token'] = self.client.get_request_token({'oauth_callback': self.client.oauth_callback_url})
+        try:
+            client = TwitterConnect.client_class()
+            self.request.session['request_token'] = client.get_request_token({'oauth_callback': client.oauth_callback_url})
+        except Exception as e:
+            raise NotAllowedException(e.message)
 
-
-class TwitterCallback(OAuthCallback, TwitterMixin):
-    client = OAuthTwitter()
+class TwitterCallback(AbstractOAuthCallback, TwitterMixin):
+    client_class = OAuthTwitter
     oauth_verifier_name = 'oauth_verifier'
 
 
-class GoogleConnect(OAuthConnect):
-    client = OAuthGoogle()
+class GoogleConnect(AbstractOAuthConnect):
+    client_class = OAuthGoogle
 
 
-class GoogleCallback(OAuthCallback, GoogleMixin):
-    client = OAuthGoogle()
+class GoogleCallback(AbstractOAuthCallback, GoogleMixin):
+    client_class = OAuthGoogle
     oauth_verifier_name = 'code'
 
 
-class GithubConnect(OAuthConnect):
+class GithubConnect(AbstractOAuthConnect):
     """under construction DNS needed"""
-    client = OAuthGithub()
+    cliclient_classent = OAuthGithub
 
 
-class GithubCallback(OAuthCallback, GithubMixin):
+class GithubCallback(AbstractOAuthCallback, GithubMixin):
     """under construction"""
-    client = OAuthGithub()
+    client_class = OAuthGithub
     oauth_verifier_name = 'code'
