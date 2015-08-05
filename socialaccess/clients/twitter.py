@@ -1,6 +1,4 @@
 import oauth2 as oauth
-import urllib
-import json
 
 from django.conf import settings
 from django.contrib.auth import authenticate

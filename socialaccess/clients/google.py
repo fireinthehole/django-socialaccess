@@ -1,12 +1,11 @@
-import oauth2 as oauth
-import urllib, urllib2
+import urllib2
 import json
+import oauth2 as oauth
 
 from django.conf import settings
 from django.contrib.auth import authenticate
 
 from socialaccess.clients import OAuth2Client
-
 
 
 class OAuthGoogle(OAuth2Client):

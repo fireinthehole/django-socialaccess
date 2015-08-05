@@ -12,8 +12,6 @@ Django >= 1.8
 
 oauth2 1.5.211
 
-lxml 3.0.1
-
 Installation
 ============
 1. Get and install

@@ -44,7 +44,7 @@ class AbstractOAuthConnect(View):
         try:
             self.request_code()
             return redirect(self.authorize_url)
-        except NotAllowedException, e:
+        except NotAllowedException as e:
             return HttpResponse('Unauthorized: %s'%e.message, status=401)
 
 
@@ -64,8 +64,7 @@ class AbstractOAuthCallback(View):
                 access_token = client.get_access_token(oauth_verifier)
                 
             user_data = client.get_profile_info(access_token)
-        except Exception, e:
-            raise e
+        except Exception as e:
             return HttpResponse('Unauthorized: %s'%e.message, status=401)
 
         user = client.authenticate(user_data['id'])

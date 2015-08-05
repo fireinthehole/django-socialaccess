@@ -1,12 +1,10 @@
-import oauth2 as oauth
-import urllib
 import json
+import oauth2 as oauth
 
 from django.conf import settings
 from django.contrib.auth import authenticate
 
 from socialaccess.clients import OAuth2Client
-
 
 
 class OAuthGithub(OAuth2Client):

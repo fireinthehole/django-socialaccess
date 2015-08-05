@@ -1,6 +1,6 @@
-import oauth2 as oauth
 import urlparse 
 import urllib
+import oauth2 as oauth
 
 from django.conf import settings
 from django.contrib.sites.models import Site

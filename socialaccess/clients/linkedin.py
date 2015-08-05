@@ -1,9 +1,5 @@
-import oauth2 as oauth
-import urllib
 import json
-
-from lxml import etree
-from cStringIO import StringIO
+import oauth2 as oauth
 
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -31,22 +27,13 @@ class OAuthLinkedIn(OAuth1Client):
 
     
     def get_profile_info(self, access_token):
-        url = getattr(settings, 'LINKEDIN_PROFILE_URL', 'http://api.linkedin.com/v1/people/')
-        url += '~:(id,first-name,last-name,headline,industry)'
+        url = getattr(settings, 'LINKEDIN_PROFILE_URL')
+        url += '~:(id,first-name,last-name,headline,industry)?format=json'
         self.client.token = oauth.Token(key=access_token['oauth_token'], secret=access_token['oauth_token_secret'])
         resp, content = self.client.request(url)
         if resp['status'] != '200':
             raise Exception("Invalid response %s." % resp['status'])
-        tree = etree.parse(StringIO(content))
-        person = tree.xpath("//person")[0]
-        data = {
-                'id'                            : person.xpath("id")[0].text,
-                'first-name'                    : person.xpath("first-name")[0].text,
-                'last-name'                     : person.xpath("last-name")[0].text,
-                'headline'                      : person.xpath("headline")[0].text,
-                'industry'                      : person.xpath("industry")[0].text,
-               }
-        return data
+        return json.loads(unicode(content))
 
     def authenticate(self, linkedin_id):
         return authenticate(linkedin_id=linkedin_id)
