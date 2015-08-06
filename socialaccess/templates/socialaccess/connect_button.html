@@ -1,0 +1,9 @@
+<a href="{% url provider_connect_uri %}">
+    {% if btn_image_uri %}
+        <img src="{{ btn_image_uri }}"></img>
+    {% elif btn_class %}
+        <i class="{{ btn_class }}"></i>
+    {% else %}
+        connect with {{ provider }}
+    {% endif %}
+</a>

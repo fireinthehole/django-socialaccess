@@ -9,14 +9,11 @@ from socialaccess.clients import OAuth2Client
 
 class OAuthFacebook(OAuth2Client):
     def __init__(self, callback_uri='socialaccess/fbcallback'):
-        try:
-            app_key = getattr(settings, 'FACEBOOK_KEY')
-            app_secret = getattr(settings, 'FACEBOOK_SECRET')
-            app_request_code_url = getattr(settings, 'FACEBOOK_REQUEST_CODE_URL')
-            app_access_token_url = getattr(settings, 'FACEBOOK_ACCESS_TOKEN_URL')
-        except AttributeError:
-            raise Exception('One of these parameters is missing in settings.py: '\
-                            'FACEBOOK_KEY / FACEBOOK_SECRET / FACEBOOK_REQUEST_CODE_URL / FACEBOOK_ACCESS_TOKEN_URL')
+        app_key = getattr(settings, 'FACEBOOK_KEY')
+        app_secret = getattr(settings, 'FACEBOOK_SECRET')
+        app_request_code_url = getattr(settings, 'FACEBOOK_REQUEST_CODE_URL')
+        app_access_token_url = getattr(settings, 'FACEBOOK_ACCESS_TOKEN_URL')
+
         OAuth2Client.__init__(self, callback_uri)
         self.client  = oauth.Client(oauth.Consumer(app_key, app_secret))
         self.request_code_url = app_request_code_url
@@ -28,7 +25,7 @@ class OAuthFacebook(OAuth2Client):
     
 
     def get_profile_info(self, access_token):
-        url = getattr(settings, 'FACEBOOK_PROFILE_URL', 'https://graph.facebook.com')
+        url = getattr(settings, 'FACEBOOK_PROFILE_URL')
         url = u'%s/me?%s' % (url, access_token)
 
         resp, content = self.client.request(url)
