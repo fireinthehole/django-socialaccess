@@ -7,11 +7,11 @@ def read(fname):
 
 setup(
     name = "django-socialaccess",
-    version = "1.0",
+    version = "0.7",
     url = 'http://github.com/fireinthehole/django-socialaccess',
     license = 'BSD',
-    description = 'Django application for cross-site authentication and api access '\
-                  'on famous social networks based on the python oauth2 lib',
+    description = 'Django application for cross-site authentications and api access '\
+                  'on famous social networks',
     long_description = read('README.rst'),
     author = 'Damian Daskalov',
     author_email = 'daskalov.damian@gmail.com',
@@ -19,7 +19,7 @@ setup(
     package_data = {'socialaccess': ['templates/socialaccess/*/*']},
     install_requires = [
         'Django>=1.8',
-        'oauth2==1.5.211',
+        'oauth2==1.9rc1',
     ],
     classifiers = [
         'Development Status :: 4 - Beta',

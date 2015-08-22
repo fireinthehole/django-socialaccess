@@ -2,15 +2,15 @@
 Django Socialaccess
 ===================
 
-This application is an OAuth based client for Django sites. It is powered by the python oauth2 client implementation and supports both the oauth and the oauth2 versions.
-Django socialaccess permits user authentication and api access to a limited list of oauth providers and their APIs.
+This application is an OAuth client for django web apps. It is powered by the python-oauth2 client library and supports both the oauth 1.0 and the oauth2 versions.
+Django socialaccess is designed for cross-site authentication, but it also provides an http client for server-side quering on the application available providers APIs.
 
 
 Requirements
 ============
 Django >= 1.8
 
-oauth2 1.5.211
+oauth2 == 1.9rc1
 
 Installation
 ============
@@ -18,11 +18,7 @@ Installation
 
     pip install git+https://github.com/fireinthehole/django-socialaccess.git
 
-    or clone it:
-
-    git clone git://github.com/fireinthehole/django-socialaccess.git
-
-2. Add the application to your Django INSTALLED_APPS in settings.py
+2. Add socialaccess to your Django INSTALLED_APPS in settings.py
 
     INSTALLED_APPS = (
     ...
@@ -36,7 +32,9 @@ Installation
 
     LINKEDIN_SECRET        = 'secret'
 
-    LINKEDIN_CONNECT_IMAGE = 'an url to a connect icon'
+    LINKEDIN_CONNECT_IMAGE = 'url to a connect icon'
+    or 
+    LINKEDIN_CONNECT_CLASS = 'fa fa-linkedin' for fontawesome img or a custom css class
 
 
     FACEBOOK_KEY           = ...
@@ -56,8 +54,6 @@ Installation
     GOOGLE_KEY           = 
 
     GOOGLE_SECRET        = 
-
-    GOOGLE_EMAIL_ADDR    = 
 
     GOOGLE_CONNECT_IMAGE = 
 
