@@ -5,13 +5,13 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login
 
-from socialaccess.clients import OAuth1Client, OAuth2Client
+from socialaccess.clients import (OAuth1Client, OAuth2Client)
 from socialaccess.clients.facebook import OAuthFacebook
 from socialaccess.clients.linkedin import OAuthLinkedIn
 from socialaccess.clients.twitter import OAuthTwitter
 from socialaccess.clients.google import OAuthGoogle
 from socialaccess.clients.github import OAuthGithub
-from socialaccess.mixins import LinkedinMixin, FacebookMixin, TwitterMixin, GoogleMixin, GithubMixin
+from socialaccess.mixins import (LinkedinMixin, FacebookMixin, TwitterMixin, GoogleMixin, GithubMixin)
 from socialaccess.exceptions import NotAllowedException
 
 
@@ -54,18 +54,26 @@ class AbstractOAuthCallback(View):
 
     def get(self, request):
         oauth_verifier = request.GET.get(self.oauth_verifier_name)
+        error_message = request.GET.get('error_message')
         request_token  = request.session.get('request_token')
         client = self.client_class()
         
+        if error_message:
+            return HttpResponse(error_message, status=400)
+
         try:
             if isinstance(client, OAuth1Client):
-                access_token = client.get_access_token(oauth_verifier, request_token['oauth_token'], request_token['oauth_token_secret'])
+                access_token = client.get_access_token(
+                    oauth_verifier = oauth_verifier, 
+                    oauth_token = request_token['oauth_token'],
+                    oauth_token_secret = request_token['oauth_token_secret']
+                )
             else:
-                access_token = client.get_access_token(oauth_verifier)
+                access_token = client.get_access_token(oauth_verifier=oauth_verifier)
                 
             user_data = client.get_profile_info(access_token)
         except Exception as e:
-            return HttpResponse('Unauthorized: %s'%e.message, status=401)
+            return HttpResponse(e.message, status=401)
 
         user = client.authenticate(user_data['id'])
         if user is None:
@@ -73,7 +81,8 @@ class AbstractOAuthCallback(View):
             user = client.authenticate(user_data['id'])
         
         login(request, user)
-        return redirect(reverse('home'))
+        print user, user.is_authenticated(), request.user.is_authenticated()
+        return redirect('/')
 
 
 class LinkedinConnect(AbstractOAuthConnect):

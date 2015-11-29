@@ -24,7 +24,7 @@ class OAuthLinkedIn(OAuth1Client):
     
     def get_profile_info(self, access_token):
         url = getattr(settings, 'LINKEDIN_PROFILE_URL')
-        url += '~:(id,first-name,last-name,headline,industry)?format=json'
+        url += '~:(id,firstName,lastName,headline,industry)?format=json'
         self.client.token = oauth.Token(key=access_token['oauth_token'], secret=access_token['oauth_token_secret'])
         resp, content = self.client.request(url)
         if resp['status'] != '200':

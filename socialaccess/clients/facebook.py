@@ -18,11 +18,9 @@ class OAuthFacebook(OAuth2Client):
         self.client  = oauth.Client(oauth.Consumer(app_key, app_secret))
         self.request_code_url = app_request_code_url
         self.access_token_url = app_access_token_url
-    
 
-    def get_authorize_url(self, scope='email, read_stream,user_photos,user_videos'):
+    def get_authorize_url(self, scope='email,read_stream,user_photos,user_videos'):
         return super(OAuthFacebook, self).get_authorize_url(scope=scope)
-    
 
     def get_profile_info(self, access_token):
         url = getattr(settings, 'FACEBOOK_PROFILE_URL')
@@ -32,7 +30,6 @@ class OAuthFacebook(OAuth2Client):
         if resp['status'] != '200':
             raise Exception("Invalid response %s." % resp['status'])        
         return json.loads(unicode(content))
-
 
     def authenticate(self, fb_id):
         return authenticate(fb_id=fb_id)

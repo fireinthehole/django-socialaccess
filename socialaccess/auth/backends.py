@@ -1,6 +1,9 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from socialaccess.models import (
+    LinkedinProfile, FacebookProfile, TwitterProfile, GoogleProfile
+)
 
-from socialaccess.models import LinkedinProfile, FacebookProfile, TwitterProfile, GoogleProfile
+User = get_user_model()
 
 
 class OAuthBackend(object):
