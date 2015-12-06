@@ -2,7 +2,7 @@
     {% if btn_image_uri %}
         <img src="{{ btn_image_uri }}"></img>
     {% elif btn_class %}
-        <i class="{{ btn_class }}"></i>
+        <button class="{{ btn_class }}">{{ btn_text }}</button>
     {% else %}
         connect with {{ provider }}
     {% endif %}
