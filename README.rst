@@ -8,7 +8,7 @@ Django socialaccess is designed for cross-site authentication, but it also provi
 
 Requirements
 ============
-Django >= 1.8
+Django >= 1.9
 
 oauth2 == 1.9rc1
 
@@ -20,11 +20,11 @@ Installation
 
 2. Add socialaccess to your Django INSTALLED_APPS in settings.py
 
-    INSTALLED_APPS = (
+    INSTALLED_APPS = [
     ...
     'socialaccess',
     ...
-    )
+    ]
 
 3. Add your keys/secrets from the sites to connect from in your settings.py
 

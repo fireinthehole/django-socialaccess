@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name = "django-socialaccess",
-    version = "0.7",
+    version = "0.8",
     url = 'http://github.com/fireinthehole/django-socialaccess',
     license = 'BSD',
     description = 'Django application for cross-site authentications and api access '\
@@ -18,7 +18,7 @@ setup(
     packages = find_packages(),
     package_data = {'socialaccess': ['templates/socialaccess/*/*']},
     install_requires = [
-        'Django>=1.8',
+        'Django>=1.9',
         'oauth2==1.9rc1',
     ],
     classifiers = [

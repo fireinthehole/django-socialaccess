@@ -1,14 +1,14 @@
 from django.conf import settings
 
 
-AUTHENTICATION_BACKENDS    = getattr(settings, 'AUTHENTICATION_BACKENDS', ('django.contrib.auth.backends.ModelBackend',))
-AUTHENTICATION_BACKENDS    += (
+AUTHENTICATION_BACKENDS    = getattr(settings, 'AUTHENTICATION_BACKENDS', ['django.contrib.auth.backends.ModelBackend',])
+AUTHENTICATION_BACKENDS    += [
                                 'socialaccess.auth.backends.OAuthFacebookBackend',
                                 'socialaccess.auth.backends.OAuthLinkedinBackend',
                                 'socialaccess.auth.backends.OAuthTwitterBackend',
                                 'socialaccess.auth.backends.OAuthGoogleBackend',
                                 'socialaccess.auth.backends.OAuthGithubBackend',
-                             )
+                             ]
 
 LINKEDIN_REQUEST_TOKEN_URL = 'https://api.linkedin.com/uas/oauth/requestToken'
 LINKEDIN_AUTHORIZE_URL     = 'https://api.linkedin.com/uas/oauth/authorize'
