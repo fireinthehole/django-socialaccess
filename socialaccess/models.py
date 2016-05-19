@@ -8,7 +8,7 @@ from django.db import models
 class OAuthProfile(models.Model):
     user = models.OneToOneField(getattr(settings, 'AUTH_USER_MODEL'),# User),
                                 related_name='oauth_profile')
-    site = models.ForeignKey(Site, default=Site.objects.get_current)
+    site = models.ForeignKey(Site, default=settings.SITE_ID)
     oauth_token = models.CharField(max_length=255)#, editable=False)
 
 
