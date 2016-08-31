@@ -19,7 +19,7 @@ setup(
     package_data = {'socialaccess': ['templates/socialaccess/*/*']},
     install_requires = [
         'Django>=1.9',
-        'oauth2==1.9rc1',
+        'oauth2==1.9.0.post1',
     ],
     classifiers = [
         'Development Status :: 4 - Beta',
