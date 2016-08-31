@@ -1,6 +1,6 @@
-import urllib2
 import json
 import oauth2 as oauth
+import urllib.request
 
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -36,9 +36,9 @@ class OAuthGoogle(OAuth2Client):
         url = getattr(settings, 'GOOGLE_PROFILE_URL')
         url = u'%s?access_token=%s' % (url, token['access_token'])        
         try:
-            request = urllib2.Request(url=url)
-            response = urllib2.urlopen(request)
-        except IOError, e:
+            request = urllib.request.Request(url=url)
+            response = urllib.request.urlopen(request)
+        except IOError as e:
             raise e
         resp, content =  response.code, response.read()
         if resp != 200:

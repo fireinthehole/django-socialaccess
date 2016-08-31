@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import urlparse 
-import urllib
+from urllib.parse import urlparse
 import json
 import oauth2 as oauth
 
+from urllib.parse import urlencode
 from django.conf import settings
 from django.contrib.sites.models import Site
 
@@ -21,9 +21,9 @@ class OAuthBaseClient(object):
     def call_api(self, url, params, method='GET'):
         _params = ''
         if method in ['GET', 'DELETE']:
-            _url = u'%s?%s' % (url, urllib.urlencode(params))
+            _url = u'%s?%s' % (url, urlencode(params))
         else:
-            _params = urllib.urlencode(params)
+            _params = urlencode(params)
             _url = url
         resp, content = self.client.request(uri=_url, 
                                             method=method, 
@@ -40,7 +40,7 @@ class OAuth1Client(OAuthBaseClient):
     def get_request_token(self, params):
         resp, content = self.client.request(uri=self.request_token_url, 
                                             method="POST", 
-                                            body=urllib.urlencode(params))
+                                            body=urlencode(params))
         if resp['status'] != '200':
             raise Exception("Invalid response %s." % resp['status'])
         request_token = dict(urlparse.parse_qsl(content))

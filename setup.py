@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name = "django-socialaccess",
-    version = "0.8",
+    version = "0.9",
     url = 'http://github.com/fireinthehole/django-socialaccess',
     license = 'BSD',
     description = 'Django application for cross-site authentications and api access '\
