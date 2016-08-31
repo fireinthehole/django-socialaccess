@@ -81,7 +81,7 @@ class AbstractOAuthCallback(View):
             user = client.authenticate(user_data['id'])
         
         login(request, user)
-        print user, user.is_authenticated(), request.user.is_authenticated()
+        print(user, user.is_authenticated(), request.user.is_authenticated())
         return redirect('/')
 
 

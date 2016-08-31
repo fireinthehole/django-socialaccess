@@ -12,7 +12,7 @@ User = get_user_model()
 
 class LinkedinMixin(object):
     def create_profile(self, user_data, access_token):
-        print user_data
+        print(user_data)
         user = User(username = '{}{}'.format(user_data['firstName'], user_data['lastName']),
                     first_name = user_data['firstName'], 
                     last_name = user_data['lastName']
