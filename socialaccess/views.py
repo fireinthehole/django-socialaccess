@@ -45,7 +45,7 @@ class AbstractOAuthConnect(View):
             self.request_code()
             return redirect(self.authorize_url)
         except NotAllowedException as e:
-            return HttpResponse('Unauthorized: %s'%e.message, status=401)
+            return HttpResponse('Unauthorized: {}'.format(e), status=401)
 
 
 class AbstractOAuthCallback(View):
@@ -73,7 +73,7 @@ class AbstractOAuthCallback(View):
                 
             user_data = client.get_profile_info(access_token)
         except Exception as e:
-            return HttpResponse(e.message, status=401)
+            return HttpResponse(e, status=401)
 
         user = client.authenticate(user_data['id'])
         if user is None:
@@ -93,7 +93,7 @@ class LinkedinConnect(AbstractOAuthConnect):
             client = LinkedinConnect.client_class()
             self.request.session['request_token'] = client.get_request_token({'oauth_callback': client.oauth_callback_url})
         except Exception as e:
-            raise NotAllowedException(e.message)
+            raise NotAllowedException(e)
 
 
 class LinkedinCallback(AbstractOAuthCallback, LinkedinMixin):
@@ -118,7 +118,7 @@ class TwitterConnect(AbstractOAuthConnect):
             client = TwitterConnect.client_class()
             self.request.session['request_token'] = client.get_request_token({'oauth_callback': client.oauth_callback_url})
         except Exception as e:
-            raise NotAllowedException(e.message)
+            raise NotAllowedException(e)
 
 class TwitterCallback(AbstractOAuthCallback, TwitterMixin):
     client_class = OAuthTwitter
