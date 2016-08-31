@@ -54,5 +54,5 @@ class ConnectButton(Node):
 def get_connect_button(parser, token):
     bits = token.contents.split()
     if len(bits) != 2:
-        raise TemplateSyntaxError, "connect_button tag takes exactly 3 arguments"
+        raise TemplateSyntaxError('connect_button tag takes exactly 3 arguments')
     return ConnectButton(bits[1])
