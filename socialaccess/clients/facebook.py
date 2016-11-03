@@ -23,13 +23,17 @@ class OAuthFacebook(OAuth2Client):
         return super(OAuthFacebook, self).get_authorize_url(scope=scope)
 
     def get_profile_info(self, access_token):
-        url = getattr(settings, 'FACEBOOK_PROFILE_URL')
-        url = u'%s/me?%s' % (url, access_token)
+        url = '{oauth_provider_profile_uri}/me?{access_token}'.format(
+            oauth_provider_profile_uri=getattr(settings, 'FACEBOOK_PROFILE_URL'), 
+            access_token=access_token
+        )
 
         resp, content = self.client.request(url)
+        content = json.loads(content.decode("utf-8"))
+
         if resp['status'] != '200':
-            raise Exception("Invalid response %s." % resp['status'])        
-        return json.loads(unicode(content))
+            raise Exception(content['error']['message'])
+        return content
 
     def authenticate(self, fb_id):
         return authenticate(fb_id=fb_id)

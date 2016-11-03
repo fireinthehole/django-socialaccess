@@ -3,7 +3,8 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.contrib.auth import login
+from django.contrib.auth import login, get_user_model
+from django.db.models import Q
 
 from socialaccess.clients import (OAuth1Client, OAuth2Client)
 from socialaccess.clients.facebook import OAuthFacebook
@@ -15,6 +16,7 @@ from socialaccess.mixins import (LinkedinMixin, FacebookMixin, TwitterMixin, Goo
 from socialaccess.exceptions import NotAllowedException
 
 
+User = get_user_model()
 
 #TODO: handle token storage & renewing
 
@@ -70,15 +72,29 @@ class AbstractOAuthCallback(View):
                 )
             else:
                 access_token = client.get_access_token(oauth_verifier=oauth_verifier)
-                
+
+            # Request the oauth provider API to get the user's profile info
             user_data = client.get_profile_info(access_token)
         except Exception as e:
             return HttpResponse(e, status=401)
 
+        # Try to authenticate a user already registered with oauth
         user = client.authenticate(user_data['id'])
         if user is None:
-            self.create_profile(user_data, access_token)
-            user = client.authenticate(user_data['id'])
+            try:
+                # Look for a user alreday registered without oauth
+                user = User.objects.get(
+                    Q(email=user_data.get('email')) | Q(username=user_data.get('username'))
+                )
+                # Refuse to authenticate if the user exists
+                return HttpResponse('User {id} already exists without social account association. Please authenticate using the login form.'.format(
+                    id=user_data.get('email')),
+                    status=401
+                )
+            except User.DoesNotExist:
+                # Create a new account with social account association
+                self.create_profile(user_data, access_token)
+                user = client.authenticate(user_data['id'])
         
         login(request, user)
         print(user, user.is_authenticated(), request.user.is_authenticated())
