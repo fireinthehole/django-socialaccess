@@ -1,83 +1,96 @@
-# -*- coding: utf-8 -*-
 import random
 from django.conf import settings
+from django.db import transaction
+from django.db import IntegrityError
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from socialaccess.models import (
     FacebookProfile, GoogleProfile, LinkedinProfile, TwitterProfile, GithubProfile
 )
 
+
 User = get_user_model()
 
 
-class LinkedinMixin(object):
+class BaseSocialMixin(object):
+    """
+    """
+    PROFILE_MODEL_CLASS = None
+
+    EMAIL_FIELD = 'email'
+    USERNAME_FIELD = 'username'
+    FIRST_NAME_FIELD = 'first_name'
+    LAST_NAME_FIELD = 'last_name'
+    UID_FIELD = 'id'
+
     def create_profile(self, user_data, access_token):
-        print(user_data)
-        user = User(username = '{}{}'.format(user_data['firstName'], user_data['lastName']),
-                    first_name = user_data['firstName'], 
-                    last_name = user_data['lastName']
-        )
-        user.save()
-        profile = LinkedinProfile(user=user, 
-                                  site=Site.objects.get_current(),
-                                  oauth_token=access_token,
-                                  uid=user_data['id']
-        )
-        profile.save()
+        """
+        """
+        site = Site.objects.get_current()
+
+        try:
+            with transaction.atomic():
+                first_name = user_data.get(self.FIRST_NAME_FIELD)
+                last_name = user_data.get(self.LAST_NAME_FIELD)
+                email = user_data.get(self.EMAIL_FIELD, '{first_name}.{last_name}@{domain}'.format(
+                    first_name=first_name,
+                    last_name=last_name,
+                    domain=site.domain,
+                ))
+                username = user_data.get(self.USERNAME_FIELD, email)
+
+                user = User(
+                    email = email, 
+                    first_name = first_name,
+                    last_name = last_name,
+                    username = username,
+                )
+                user.save()
+
+                profile_class = self.PROFILE_MODEL_CLASS
+
+                profile = profile_class(
+                    user = user, 
+                    site = site,
+                    oauth_token = access_token,
+                    uid = user_data[self.UID_FIELD],
+                )
+                profile.save()
+        except IntegrityError:
+            transaction.rollback()
+            raise
+
+class FacebookMixin(BaseSocialMixin):
+    """
+    """
+    PROFILE_MODEL_CLASS = FacebookProfile
+    
+
+class GoogleMixin(BaseSocialMixin):
+    """
+    """
+    PROFILE_MODEL_CLASS = GoogleProfile
+
+    FIRST_NAME_FIELD = 'given_name'
+    LAST_NAME_FIELD = 'family_name'
 
 
-class FacebookMixin(object):
-    def create_profile(self, user_data, access_token):
-        user = User(email = user_data['email'], 
-                    first_name = user_data['first_name'],
-                    last_name  = user_data['last_name']
-        )
-        user.save()
-        profile = FacebookProfile(user=user, 
-                                  site=Site.objects.get_current(),
-                                  oauth_token=access_token,
-                                  uid=user_data['id']
-        )
-        profile.save()
+class LinkedinMixin(BaseSocialMixin):
+    """
+    """
+    PROFILE_MODEL_CLASS = LinkedinProfile
+
+    FIRST_NAME_FIELD = 'firstName'
+    LAST_NAME_FIELD = 'lastName'
 
 
-class TwitterMixin(object):
-    def create_profile(self, user_data, access_token):
-        user = User(username = user_data['username'])
-        user.save()
-        profile = TwitterProfile(user=user, 
-                                 site=Site.objects.get_current(),
-                                 oauth_token=access_token,
-                                 uid=user_data['id']
-        )
-        profile.save()
+class TwitterMixin(BaseSocialMixin):
+    """
+    """
+    PROFILE_MODEL_CLASS = TwitterProfile
 
 
-class GoogleMixin(object):
-    def create_profile(self, user_data, access_token):
-        user = User(username   = user_data['name'],
-                    first_name = user_data['given_name'],
-                    last_name  = user_data['family_name'],
-                    email      = user_data['email'])
-        user.save()
-        profile = GoogleProfile( user=user, 
-                                 site=Site.objects.get_current(),
-                                 oauth_token=access_token,
-                                 uid=user_data['id']
-        )
-        profile.save()
-
-
-class GithubMixin(object):
-    def create_profile(self, user_data, access_token):
-        user = User(username   = user_data['name'],
-                    first_name = user_data['given_name'],
-                    last_name  = user_data['family_name'],
-                    email      = user_data['email'])
-        user.save()
-        profile = GithubProfile( user=user, 
-                                 site=Site.objects.get_current(),
-                                 oauth_token=access_token,
-                                 uid=user_data['id']
-        )
-        profile.save()
+class GithubMixin(BaseSocialMixin):
+    """
+    """
+    PROFILE_MODEL_CLASS = GithubProfile

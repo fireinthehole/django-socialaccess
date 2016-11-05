@@ -19,11 +19,9 @@ class OAuthGithub(OAuth2Client):
         self.request_code_url = app_request_code_url
         self.access_token_url = app_access_token_url
     
-
     def get_authorize_url(self, scope='user,public_repo'):
         return super(OAuthGithub, self).get_authorize_url(scope=scope)
     
-
     def get_profile_info(self, access_token):
         url = getattr(settings, 'GITHUB_PROFILE_URL')
         url = u'%s?access_token=%s' % (url, access_token)
@@ -32,7 +30,6 @@ class OAuthGithub(OAuth2Client):
         if resp['status'] != '200':
             raise Exception("Invalid response %s." % resp['status'])        
         return json.loads(unicode(content))
-
 
     def authenticate(self, github_id):
         return authenticate(github_id=github_id)

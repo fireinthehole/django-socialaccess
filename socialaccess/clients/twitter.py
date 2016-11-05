@@ -20,13 +20,11 @@ class OAuthTwitter(OAuth1Client):
         self.authorize_url     = app_authorize_url
         self.access_token_url  = app_access_token_url
 
-    
     def get_profile_info(self, access_token):
         return  {
                     'id' : access_token['user_id'],
                     'username' : access_token['screen_name'],
                 }
-
 
     def authenticate(self, twitter_id):
         return authenticate(twitter_id=twitter_id)

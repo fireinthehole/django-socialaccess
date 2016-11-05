@@ -17,7 +17,7 @@ LINKEDIN_PROFILE_URL       = 'http://api.linkedin.com/v1/people/'
 
 FACEBOOK_REQUEST_CODE_URL  = 'https://www.facebook.com/dialog/oauth'
 FACEBOOK_ACCESS_TOKEN_URL  = 'https://graph.facebook.com/oauth/access_token'
-FACEBOOK_PROFILE_URL       = 'https://graph.facebook.com'
+FACEBOOK_PROFILE_URL       = 'https://graph.facebook.com/me'
 
 TWITTER_REQUEST_TOKEN_URL  = 'https://api.twitter.com/oauth/request_token'
 TWITTER_AUTHORIZE_URL      = 'https://api.twitter.com/oauth/authenticate'

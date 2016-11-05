@@ -21,7 +21,6 @@ class OAuthLinkedIn(OAuth1Client):
         self.authorize_url     = app_authorize_url
         self.access_token_url  = app_access_token_url
 
-    
     def get_profile_info(self, access_token):
         url = getattr(settings, 'LINKEDIN_PROFILE_URL')
         url += '~:(id,firstName,lastName,headline,industry)?format=json'

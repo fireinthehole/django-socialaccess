@@ -4,7 +4,6 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, get_user_model
-from django.db.models import Q
 
 from socialaccess.clients import (OAuth1Client, OAuth2Client)
 from socialaccess.clients.facebook import OAuthFacebook
@@ -18,7 +17,6 @@ from socialaccess.exceptions import NotAllowedException
 
 User = get_user_model()
 
-#TODO: handle token storage & renewing
 
 class AbstractOAuthConnect(View):
     client_class = None
@@ -80,12 +78,14 @@ class AbstractOAuthCallback(View):
 
         # Try to authenticate a user already registered with oauth
         user = client.authenticate(user_data['id'])
+
         if user is None:
+            if 'email' not in user_data:
+                return HttpResponse('Cannot create user, email field has not been authorized', status=401)
             try:
                 # Look for a user alreday registered without oauth
-                user = User.objects.get(
-                    Q(email=user_data.get('email')) | Q(username=user_data.get('username'))
-                )
+                user = User.objects.get(email=user_data.get('email'))
+                
                 # Refuse to authenticate if the user exists
                 return HttpResponse('User {id} already exists without social account association. Please authenticate using the login form.'.format(
                     id=user_data.get('email')),
@@ -151,11 +151,9 @@ class GoogleCallback(AbstractOAuthCallback, GoogleMixin):
 
 
 class GithubConnect(AbstractOAuthConnect):
-    """under construction DNS needed"""
     cliclient_classent = OAuthGithub
 
 
 class GithubCallback(AbstractOAuthCallback, GithubMixin):
-    """under construction"""
     client_class = OAuthGithub
     oauth_verifier_name = 'code'
