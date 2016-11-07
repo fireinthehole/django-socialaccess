@@ -16,7 +16,7 @@ setup(
     author = 'Damian Daskalov',
     author_email = 'daskalov.damian@gmail.com',
     packages = find_packages(),
-    package_data = {'socialaccess': ['templates/socialaccess/*/*']},
+    include_package_data = True,
     install_requires = [
         'Django>=1.9',
         'oauth2==1.9.0.post1',
