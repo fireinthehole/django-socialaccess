@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from socialaccess.models import (
-    LinkedinProfile, FacebookProfile, TwitterProfile, GoogleProfile
+    LinkedinProfile, FacebookProfile, GoogleProfile
 )
 
 User = get_user_model()
@@ -41,28 +41,10 @@ class OAuthFacebookBackend(OAuthBackend):
             return None 
 
 
-class OAuthTwitterBackend(OAuthBackend):
-    def authenticate(self, twitter_id):
-        try:
-            profile = TwitterProfile.objects.get(uid=twitter_id)
-            return profile.user
-        except TwitterProfile.DoesNotExist:
-            return None  
-
-
 class OAuthGoogleBackend(OAuthBackend):
     def authenticate(self, google_id):
         try:
             profile = GoogleProfile.objects.get(uid=google_id)
             return profile.user
         except GoogleProfile.DoesNotExist:
-            return None 
-
-
-class OAuthGithubBackend(OAuthBackend):
-    def authenticate(self, github_id):
-        try:
-            profile = GithubProfile.objects.get(uid=github_id)
-            return profile.user
-        except GithubProfile.DoesNotExist:
             return None 

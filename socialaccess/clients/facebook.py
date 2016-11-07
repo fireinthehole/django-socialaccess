@@ -1,6 +1,6 @@
 import json
 import oauth2 as oauth
-from urllib.parse import urlencode
+from urllib.parse import urlencode, parse_qs
 from django.conf import settings
 from django.contrib.auth import authenticate
 from socialaccess.clients import OAuth2Client
@@ -18,11 +18,14 @@ class OAuthFacebook(OAuth2Client):
         self.request_code_url = app_request_code_url
         self.access_token_url = app_access_token_url
 
-    def get_authorize_url(self, scope='email,read_stream,user_photos,user_videos'):
+    def get_authorize_url(self, scope='public_profile,email'):
         return super(OAuthFacebook, self).get_authorize_url(scope=scope)
 
     def get_profile_info(self, access_token):
-        params = urlencode({'access_token': access_token.split('&', 1)[0].split('=', 1)[1]})
+        params = urlencode({
+            'fields': 'id,email,first_name,last_name',
+            'access_token': parse_qs(access_token).get('access_token')[0],
+        })
         url = getattr(settings, 'FACEBOOK_PROFILE_URL') + '?' + params
 
         resp, content = self.client.request(url)

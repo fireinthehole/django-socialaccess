@@ -46,7 +46,8 @@ class OAuthGoogle(OAuth2Client):
             request = urllib.request.Request(url=url+'?'+params)
             response = urllib.request.urlopen(request)
         except IOError as e:
-            raise e
+            contents = e.read()
+            raise Exception(contents.decode('utf-8'))
         resp, content =  response.code, response.read()
         if resp != 200:
             raise Exception("Invalid response %s." % resp)        

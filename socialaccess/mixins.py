@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from socialaccess.models import (
-    FacebookProfile, GoogleProfile, LinkedinProfile, TwitterProfile, GithubProfile
+    FacebookProfile, GoogleProfile, LinkedinProfile
 )
 
 
@@ -37,7 +37,7 @@ class BaseSocialMixin(object):
                     last_name=last_name,
                     domain=site.domain,
                 ))
-                username = user_data.get(self.USERNAME_FIELD, email)
+                username = user_data.get(self.UID_FIELD)
 
                 user = User(
                     email = email, 
@@ -80,17 +80,6 @@ class LinkedinMixin(BaseSocialMixin):
     """
     PROFILE_MODEL_CLASS = LinkedinProfile
 
+    EMAIL_FIELD = 'emailAddress'
     FIRST_NAME_FIELD = 'firstName'
     LAST_NAME_FIELD = 'lastName'
-
-
-class TwitterMixin(BaseSocialMixin):
-    """
-    """
-    PROFILE_MODEL_CLASS = TwitterProfile
-
-
-class GithubMixin(BaseSocialMixin):
-    """
-    """
-    PROFILE_MODEL_CLASS = GithubProfile

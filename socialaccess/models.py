@@ -1,4 +1,5 @@
 import json
+from urllib.parse import parse_qs
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -16,7 +17,7 @@ class FacebookProfile(OAuthProfile):
 
     @property
     def access_token(self):
-    	return self.oauth_token.split('&', 1)[0].split('=', 1)[1]
+    	return parse_qs(access_token).get('access_token')[0]
 
 
 class GoogleProfile(OAuthProfile):
@@ -28,12 +29,4 @@ class GoogleProfile(OAuthProfile):
 
 
 class LinkedinProfile(OAuthProfile):
-    uid = models.CharField(max_length=128)
-
-
-class TwitterProfile(OAuthProfile):
-    uid = models.CharField(max_length=128)
-
-
-class GithubProfile(OAuthProfile):
     uid = models.CharField(max_length=128)
