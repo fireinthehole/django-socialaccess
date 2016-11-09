@@ -2,82 +2,97 @@
 Django Socialaccess
 ===================
 
-This application is an OAuth client for django web apps. It is powered by the python-oauth2 client library and supports both the oauth 1.0 and the oauth2 versions.
-Django socialaccess is designed for cross-site authentication, but it also provides an http client for server-side quering on the application available providers APIs.
+Simple django authentication client for a list of providers implementing the OAuth 2 protocol.
+Actually the supported providers are Facebook, Google and Linkedin.
 
 
 Requirements
 ============
+Python 3
+
 Django >= 1.9
 
-oauth2 == 1.9rc1
 
 Installation
 ============
-1. Get and install
+``git clone git://github.com/fireinthehole/django-socialaccess.git``
 
-    pip install git+https://github.com/fireinthehole/django-socialaccess.git
+Installing the django-socialaccess package is performed as usual
 
-2. Add socialaccess to your Django INSTALLED_APPS in settings.py
+``python3 setup.py install``
 
-    INSTALLED_APPS = [
-    ...
-    'socialaccess',
-    ...
-    ]
+Configuration
+=============
+- Add ``socialaccess`` to INSTALLED_APPS in your django settings.py
 
-3. Add your keys/secrets from the sites to connect from in your settings.py
+ ``INSTALLED_APPS = [``
 
-    LINKEDIN_KEY           = 'app key'
+ ``..``
 
-    LINKEDIN_SECRET        = 'secret'
+ ``'socialaccess',``
 
-    LINKEDIN_CONNECT_IMAGE = 'url to a connect icon'
-    or 
-    LINKEDIN_CONNECT_CLASS = 'fa fa-linkedin' for fontawesome img or a custom css class
+ ``..``
+ ``]``
 
+- Activate the Django Sites framework in settings.py
 
-    FACEBOOK_KEY           = ...
+ Add ``SITE_ID``
 
-    FACEBOOK_SECRET        = ..
+ Add ``django.contrib.sites`` to ``INSTALLED_APPS``
 
-    FACEBOOK_CONNECT_IMAGE = .
+- Add the app credentials for each provider you want to use as follows:
 
+  For facebook:
 
-    TWITTER_KEY           = 
+  ``FACEBOOK_KEY = 'your app key'``
 
-    TWITTER_SECRET        = 
+  ``FACEBOOK_SECRET = 'your app secret'``
 
-    TWITTER_CONNECT_IMAGE = 
+  ``FACEBOOK_SCOPE = 'public_profile,email'`` (at least ``'public_profile,email'`` depending that data you want to retrieve from the provider)
 
+- Configure the connect buttons style
 
-    GOOGLE_KEY           = 
+  ``FACEBOOK_CONNECT_CLASS = 'custom css classes'``
+ 
+ or
+ 
+ ``FACEBOOK_CONNECT_IMAGE = 'url to the connect button image'``
 
-    GOOGLE_SECRET        = 
+- For each provider the settings variable are prefixed by its name the same way
 
-    GOOGLE_CONNECT_IMAGE = 
+ For linkedin:
 
+  ``LINKEDIN_KEY, LINKEDIN_SECRET, LINKEDIN_SCOPE, LINKEDIN_CONNECT_CLASS, LINKEDIN_CONNECT_IMAGE..``
 
-    GITHUB_KEY           = 
+ For google:
 
-    GITHUB_SECRET        = 
+  ``GOOGLE_KEY, GOOGLE_SECRET, GOOGLE_SCOPE, GOOGLE_CONNECT_CLASS, GOOGLE_CONNECT_IMAGE..``
 
-    GITHUB_CONNECT_IMAGE = 
+- Create the OAuth providers connect buttons
 
-No other settings are required. 
-The rest of the settings, such as custom authentication backends and OAuth servers request/access token urls are loaded implicitely into the settings.py
+ django-socialaccess connect buttons are custom tags. Load the template tags library inside the login page template of your web site and place the connect buttons.
 
-4. Create the extended profiles
-    python manage.py syncdb
+ ``{% load connect_buttons %}``
 
-5. The authentication is working by simply adding a tag from the following list inside your login page template. 
+ ...
 
-    {% connect_button google %}
+ ``{% connect_button google %}``
 
-    {% connect_button facebook %}
+ ``{% connect_button facebook %}``
 
-    {% connect_button linkedin %}
+ ``{% connect_button linkedin %}``
 
-    {% connect_button twitter %}
+ ...
 
-    {% connect_button github %}
+- Create the django-socialaccess extended profiles
+
+ ``python manage.py makemigrations socialaccess``
+
+ ``python manage.py migrate``
+
+- Set your site domain name
+
+ From the django admin interface, set ``site.domain`` to your web site domain name
+
+ In the demo example, the used domain is example.com:8000.
+ For localhost set up example.com in /etc/hosts

@@ -1,66 +1,52 @@
-import json
 from django.views.generic.base import View
 from django.shortcuts import redirect
 from django.http import HttpResponse
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, get_user_model
-
-from socialaccess.clients import OAuth2Client
-from socialaccess.clients.facebook import OAuthFacebook
-from socialaccess.clients.linkedin import OAuthLinkedIn
-from socialaccess.clients.google import OAuthGoogle
-from socialaccess.mixins import (LinkedinMixin, FacebookMixin, GoogleMixin)
+from socialaccess.mixins import (
+    FacebookViewMixin, GoogleViewMixin, LinkedinViewMixin
+)
 
 
 User = get_user_model()
 
 
-class AbstractOAuthConnectView(View):
+class AbstractOAuth2ConnectView(View):
     """
     """
-    client_class = None
-
-    @property
-    def authorize_url(self):
-        """
-            Build the authorization url
-        """
-        client = self.client_class()
-        return client.get_authorize_url()
-
     def get(self, request):
-        return redirect(self.authorize_url)
+        oauth2_client = self.get_oauth2_client()
+        authorize_url = oauth2_client.get_authorize_url()
+        return redirect(authorize_url)
 
 
-class AbstractOAuthCallbackView(View):
+class AbstractOAuth2CallbackView(View):
     """
     """
-    client_class = None
-
     def get(self, request):
         oauth_verifier = request.GET.get('code')
         error_message = request.GET.get('error_message')
-        client = self.client_class()
+        
+        oauth2_client = self.get_oauth2_client()
         
         if error_message:
             return HttpResponse('An error occured on the callback step: {}'.format(error_message), status=400)
 
         # Get the access token
         try:
-            access_token = client.get_access_token(oauth_verifier=oauth_verifier)
+            access_token = oauth2_client.get_access_token(oauth_verifier=oauth_verifier)
         except Exception as e:
             return HttpResponse(e, status=400)
 
         # Get the user profile information
         try:
             # Request the oauth provider API to get the user's profile info
-            user_data = client.get_profile_info(access_token)
+            user_data = oauth2_client.get_profile_info(access_token)
         except Exception as e:
             return HttpResponse(e, status=400)
 
         # Try to authenticate a user already registered with oauth
-        user = client.authenticate(user_data['id'])
+        user = oauth2_client.authenticate(user_data['id'])
 
         if user is None:
             try:
@@ -74,32 +60,37 @@ class AbstractOAuthCallbackView(View):
                 )
             except User.DoesNotExist:
                 # Create a new account with social account association
-                self.create_profile(user_data, access_token)
-                user = client.authenticate(user_data['id'])
-        
+                oauth2_client.create_profile(user_data, access_token)
+                user = oauth2_client.authenticate(user_data['id'])
+
+        # Update the user access_token
+        if user.oauth_user.oauth_token != access_token:
+            user.oauth_user.oauth_token = access_token
+            user.oauth_user.save()
+
         login(request, user)
         return redirect('/')
 
 
-class FacebookConnectView(AbstractOAuthConnectView):
-    client_class = OAuthFacebook
+class FacebookConnectView(AbstractOAuth2ConnectView, FacebookViewMixin):
+    pass
 
 
-class FacebookCallbackView(AbstractOAuthCallbackView, FacebookMixin):
-    client_class = OAuthFacebook
+class FacebookCallbackView(AbstractOAuth2CallbackView, FacebookViewMixin):
+    pass
 
 
-class GoogleConnectView(AbstractOAuthConnectView):
-    client_class = OAuthGoogle
+class GoogleConnectView(AbstractOAuth2ConnectView, GoogleViewMixin):
+    pass
 
 
-class GoogleCallbackView(AbstractOAuthCallbackView, GoogleMixin):
-    client_class = OAuthGoogle
+class GoogleCallbackView(AbstractOAuth2CallbackView, GoogleViewMixin):
+    pass
 
 
-class LinkedinConnectView(AbstractOAuthConnectView):
-    client_class = OAuthLinkedIn
+class LinkedinConnectView(AbstractOAuth2ConnectView, LinkedinViewMixin):
+    pass
 
 
-class LinkedinCallbackView(AbstractOAuthCallbackView, LinkedinMixin):
-    client_class = OAuthLinkedIn
+class LinkedinCallbackView(AbstractOAuth2CallbackView, LinkedinViewMixin):
+    pass

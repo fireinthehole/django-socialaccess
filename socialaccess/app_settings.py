@@ -11,11 +11,14 @@ AUTHENTICATION_BACKENDS    += [
 FACEBOOK_REQUEST_CODE_URL  = 'https://www.facebook.com/dialog/oauth'
 FACEBOOK_ACCESS_TOKEN_URL  = 'https://graph.facebook.com/oauth/access_token'
 FACEBOOK_PROFILE_URL       = 'https://graph.facebook.com/me'
+FACEBOOK_SCOPE             = 'public_profile,email'
 
 GOOGLE_REQUEST_CODE_URL    = 'https://accounts.google.com/o/oauth2/auth'
 GOOGLE_ACCESS_TOKEN_URL    = 'https://accounts.google.com/o/oauth2/token'
 GOOGLE_PROFILE_URL         = 'https://www.googleapis.com/oauth2/v1/userinfo'
+GOOGLE_SCOPE               = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
 
 LINKEDIN_REQUEST_CODE_URL  = 'https://www.linkedin.com/oauth/v2/authorization'
 LINKEDIN_ACCESS_TOKEN_URL  = 'https://www.linkedin.com/oauth/v2/accessToken'
 LINKEDIN_PROFILE_URL       = 'https://api.linkedin.com/v1/people/~:(id,email-address,firstName,lastName)'
+LINKEDIN_SCOPE             = 'r_basicprofile r_emailaddress'

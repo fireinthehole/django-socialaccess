@@ -11,25 +11,11 @@ class OAuthBackend(object):
     supports_anonymous_user = False
     supports_inactive_user = False
 
-    def authenticate(self):
-        pass
-
     def get_user(self, user_id):
-        user = None
         try:
-            user = User.objects.get(pk=user_id)
-        except:
-            pass
-        return user
-
-
-class OAuthLinkedinBackend(OAuthBackend):
-    def authenticate(self, linkedin_id):
-        try:
-            profile = LinkedinProfile.objects.get(uid=linkedin_id)
-            return profile.user
-        except LinkedinProfile.DoesNotExist:
-            return None      
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
 
 
 class OAuthFacebookBackend(OAuthBackend):
@@ -38,7 +24,7 @@ class OAuthFacebookBackend(OAuthBackend):
             profile = FacebookProfile.objects.get(uid=fb_id)
             return profile.user
         except FacebookProfile.DoesNotExist:
-            return None 
+            return None
 
 
 class OAuthGoogleBackend(OAuthBackend):
@@ -47,4 +33,13 @@ class OAuthGoogleBackend(OAuthBackend):
             profile = GoogleProfile.objects.get(uid=google_id)
             return profile.user
         except GoogleProfile.DoesNotExist:
-            return None 
+            return None
+
+
+class OAuthLinkedinBackend(OAuthBackend):
+    def authenticate(self, linkedin_id):
+        try:
+            profile = LinkedinProfile.objects.get(uid=linkedin_id)
+            return profile.user
+        except LinkedinProfile.DoesNotExist:
+            return None
