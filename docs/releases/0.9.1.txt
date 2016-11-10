@@ -4,14 +4,15 @@ django-socialaccess release notes
 
 * 9 November 2016
 
-django-socialaccess 0.9.1 fixes the following issues in 0.9.
+django-socialaccess 0.9.1 fixes the following issues in 0.8.
 
 Migrating OAuth 1.x to OAuth 2
 ==============================
 
-Since the OAuth 1.x protocol was officially deprecated on April 20, 2012, django-cosialaccess migrated to OAuth 2.0. All OAuth 1.x base implementations were deleted from the package. Consequently all oauth clients for the supported providers were recoded in order to implement OAuth 2.
+Since the OAuth 1.x protocol was officially deprecated on April 20, 2012, django-socialaccess migrated to OAuth 2.0. 
+All OAuth 1.x base implementations were deleted from the package. Consequently all oauth clients for the supported providers were recoded in order to implement OAuth 2.
 
-Removing of a dependency (oauth2 1.9.0.post1)
+Removing a dependency (oauth2 1.9.0.post1)
 =============================================
 
 OAuth v2 being simpler to implement than v1, the dependency ``oauth2 1.9.0.post1`` was replaced by the native ``urllib``

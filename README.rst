@@ -43,21 +43,21 @@ Configuration
 
 - Set the default http protocol
 
-  ``DEFAULT_HTTP_PROTOCOL = 'https'``
+ ``DEFAULT_HTTP_PROTOCOL = 'https'``
 
 - Add the app credentials for each provider you want to use as follows:
 
-  For facebook:
+ For facebook:
 
-  ``FACEBOOK_KEY = 'your app key'``
+ ``FACEBOOK_KEY = 'your app key'``
 
-  ``FACEBOOK_SECRET = 'your app secret'``
+ ``FACEBOOK_SECRET = 'your app secret'``
 
-  ``FACEBOOK_SCOPE = 'public_profile,email'`` (at least ``'public_profile,email'`` depending that data you want to retrieve from the provider)
+ ``FACEBOOK_SCOPE = 'public_profile,email'`` (at least ``'public_profile,email'`` depending that data you want to retrieve from the provider)
 
 - Configure the connect buttons style
 
-  ``FACEBOOK_CONNECT_CLASS = 'custom css classes'``
+ ``FACEBOOK_CONNECT_CLASS = 'custom css classes'``
  
  or
  
@@ -67,11 +67,11 @@ Configuration
 
  For linkedin:
 
-  ``LINKEDIN_KEY, LINKEDIN_SECRET, LINKEDIN_SCOPE, LINKEDIN_CONNECT_CLASS, LINKEDIN_CONNECT_IMAGE..``
+ ``LINKEDIN_KEY, LINKEDIN_SECRET, LINKEDIN_SCOPE, LINKEDIN_CONNECT_CLASS, LINKEDIN_CONNECT_IMAGE..``
 
  For google:
 
-  ``GOOGLE_KEY, GOOGLE_SECRET, GOOGLE_SCOPE, GOOGLE_CONNECT_CLASS, GOOGLE_CONNECT_IMAGE..``
+ ``GOOGLE_KEY, GOOGLE_SECRET, GOOGLE_SCOPE, GOOGLE_CONNECT_CLASS, GOOGLE_CONNECT_IMAGE..``
 
 - Create the OAuth providers connect buttons
 
