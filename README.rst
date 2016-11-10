@@ -17,9 +17,10 @@ Installation
 ============
 ``git clone git://github.com/fireinthehole/django-socialaccess.git``
 
-Installing the django-socialaccess package is performed as usual
+``cd django-socialaccess``
 
-``python3 setup.py install``
+``pip install .``
+
 
 Configuration
 =============
@@ -39,6 +40,10 @@ Configuration
  Add ``SITE_ID``
 
  Add ``django.contrib.sites`` to ``INSTALLED_APPS``
+
+- Set the default http protocol
+
+  ``DEFAULT_HTTP_PROTOCOL = 'https'``
 
 - Add the app credentials for each provider you want to use as follows:
 
@@ -85,8 +90,6 @@ Configuration
  ...
 
 - Create the django-socialaccess extended profiles
-
- ``python manage.py makemigrations socialaccess``
 
  ``python manage.py migrate``
 

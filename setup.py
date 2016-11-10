@@ -1,10 +1,11 @@
 import os
 from setuptools import setup, find_packages
-from socialaccess import __vresion__ as version
+
+
+version = '0.9.1'
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
 
 setup(
     name = 'django-socialaccess',
