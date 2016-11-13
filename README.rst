@@ -99,3 +99,15 @@ Configuration
 
  In the demo example, the used domain is example.com:8000.
  For localhost set up example.com in /etc/hosts
+
+- Callback urls
+
+  While creating your apps on the provider side, you may be asked to give your site callback urls.
+  They actually are:
+
+  ``/socialaccess/fbcallback``
+
+  ``/socialaccess/linkedincallback``
+
+  ``/socialaccess/googlecallback``
+
