@@ -20,7 +20,6 @@ class OAuth2GitHubClient(OAuth2Client):
 
     def _prepare_profile_info_params(self, access_token):
         return {
-            #'fields': 'id,email,first_name,last_name',
             'access_token': parse_qs(access_token).get('access_token')[0],
         }
 
