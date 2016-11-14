@@ -51,11 +51,11 @@
 
             .btn-github {
                 color: #fff;
-                background-color: #DFDFDD;
+                background-color: #505050;
             }
             .btn-github:hover, .btn-github:focus, .btn-github:active, .btn-github.active, .open>.dropdown-toggle.btn-github {
                 color: #fff;
-                background-color: #9E9E9C;
+                background-color: #444;
             }
         </style>
         <title>Welcome | {{ site.name }}</title>
@@ -119,6 +119,13 @@
                     <div class="col-md-3 col-md-offset-1">
                         <!-- Linkedin connect button -->
                         {% connect_button linkedin %}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-3 col-md-offset-1">
+                        <!-- Linkedin connect button -->
+                        {% connect_button github %}
                     </div>
                 </div>
             </div>

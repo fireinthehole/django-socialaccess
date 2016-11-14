@@ -135,23 +135,33 @@ STATICFILES_DIRS = [
     '/var/www/static',
 ]
 
+
+# django-socialaccess settings
+
 FACEBOOK_KEY = '1023654184430110'
 FACEBOOK_SECRET = '17a5dc215ab7e6bf0b6902dd21d27363'
-#FACEBOOK_CONNECT_IMAGE = 'http://www.heartlink.co.uk/heartlink/test/images/f-login.png'
+#FACEBOOK_CONNECT_IMAGE = ''
 FACEBOOK_CONNECT_CLASS = 'btn btn-facebook btn-block fa fa-facebook'
 FACEBOOK_CONNECT_TEXT = ' Connect with Facebook'
 FACEBOOK_SCOPE = 'public_profile,email'
 
 GOOGLE_KEY = '885604431543-e42oekfhnmtm564trgnl1p01ni4244vu.apps.googleusercontent.com'
 GOOGLE_SECRET = 'rmm-sQAulYSrsy73vXH1ftsB'
-#GOOGLE_CONNECT_IMAGE = 'https://camo.githubusercontent.com/19c7063366f7e63ab2efed80cbe4af8c18fa00f4/68747470733a2f2f646576656c6f706572732e676f6f676c652e636f6d2f6964656e746974792f696d616765732f7369676e2d696e2d776974682d676f6f676c652e706e67'
+#GOOGLE_CONNECT_IMAGE = ''
 GOOGLE_CONNECT_CLASS = 'btn btn-google btn-block fa fa-google-plus'
 GOOGLE_CONNECT_TEXT = ' Connect with Google'
 GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
 
 LINKEDIN_KEY = '75hzh89es2gf7y'
 LINKEDIN_SECRET = 'WAovEwzd9Twq9kxY'
-#LINKEDIN_CONNECT_IMAGE = 'https://photofeeler.s3.amazonaws.com/images/linkedin-login.png'
+#LINKEDIN_CONNECT_IMAGE = ''
 LINKEDIN_CONNECT_CLASS = 'btn btn-linkedin btn-block fa fa-linkedin'
 LINKEDIN_CONNECT_TEXT = ' Connect with LinkedIn'
 LINKEDIN_SCOPE = 'r_basicprofile r_emailaddress'
+
+GITHUB_KEY = '47ae609a23644e316666'
+GITHUB_SECRET = 'fb00835373875fbc6482aeb041e29d2b965ad95f'
+#GITHUB_CONNECT_IMAGE = ''
+GITHUB_CONNECT_CLASS = 'btn btn-github btn-block fa fa-github'
+GITHUB_CONNECT_TEXT = ' Connect with GitHub'
+GITHUB_SCOPE = 'r_basicprofile r_emailaddress'

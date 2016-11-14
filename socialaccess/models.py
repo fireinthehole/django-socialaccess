@@ -88,3 +88,13 @@ class LinkedinProfile(OAuthProfile, ProfileModelMixin):
     @property
     def access_token(self):
         return json.loads(self.oauth_token).get('access_token')
+
+
+class GithubProfile(OAuthProfile, ProfileModelMixin):
+    """
+    """
+    uid = models.CharField(max_length=128)
+
+    @property
+    def access_token(self):
+        return parse_qs(self.oauth_token).get('access_token')[0]

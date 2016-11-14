@@ -3,7 +3,7 @@ Django Socialaccess
 ===================
 
 Simple django authentication client for a list of providers implementing the OAuth 2 protocol.
-Actually the supported providers are Facebook, Google and Linkedin.
+Actually the supported providers are Facebook, Google, Linkedin and Github.
 
 
 Requirements
@@ -41,7 +41,7 @@ Configuration
 
  Add ``django.contrib.sites`` to ``INSTALLED_APPS``
 
-- Set the default http protocol
+- Set the default http protocol in production
 
  ``DEFAULT_HTTP_PROTOCOL = 'https'``
 
@@ -73,6 +73,10 @@ Configuration
 
  ``GOOGLE_KEY, GOOGLE_SECRET, GOOGLE_SCOPE, GOOGLE_CONNECT_CLASS, GOOGLE_CONNECT_IMAGE..``
 
+ For github:
+
+ ``GITHUB_KEY, GITHUB_SECRET, GITHUB_SCOPE, GITHUB_CONNECT_CLASS, GITHUB_CONNECT_IMAGE..``
+
 - Create the OAuth providers connect buttons
 
  django-socialaccess connect buttons are custom tags. Load the template tags library inside the login page template of your web site and place the connect buttons.
@@ -86,6 +90,8 @@ Configuration
  ``{% connect_button facebook %}``
 
  ``{% connect_button linkedin %}``
+
+ ``{% connect_button github %}``
 
  ...
 
@@ -110,4 +116,6 @@ Configuration
   ``/socialaccess/linkedincallback``
 
   ``/socialaccess/googlecallback``
+
+  ``/socialaccess/githubcallback``
 

@@ -4,6 +4,7 @@ from socialaccess.views import (
     LinkedinConnectView, LinkedinCallbackView,
     FacebookConnectView, FacebookCallbackView,
     GoogleConnectView, GoogleCallbackView,
+    GithubConnectView, GithubCallbackView,
 )
 
 
@@ -16,4 +17,7 @@ urlpatterns = [
 
     url(r'^googlelogin/$', GoogleConnectView.as_view(), name='google_connect'),
     url(r'^googlecallback/$', GoogleCallbackView.as_view(), name='google_callback'),
+
+    url(r'^githublogin/$', GithubConnectView.as_view(), name='github_connect'),
+    url(r'^githubcallback/$', GithubCallbackView.as_view(), name='github_callback'),
 ]

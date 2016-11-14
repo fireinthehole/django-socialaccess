@@ -22,6 +22,7 @@ class OAuth2Client(object):
         self.request_code_url = request_code_url
         self.access_token_url = access_token_url
         self.scope = scope
+        self.state = ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in range(32))
         self.profile_url = profile_url
 
     def _prepare_request_code_url_params(self):
@@ -30,7 +31,7 @@ class OAuth2Client(object):
             'response_type': 'code',
             'redirect_uri': self.oauth_callback_url,
             'scope': self.scope,
-            'state': ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in range(32)),
+            'state': self.state,
         }
 
     def _prepare_access_token_url_params(self):

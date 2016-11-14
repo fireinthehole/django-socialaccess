@@ -2,6 +2,7 @@ from django.conf import settings
 from socialaccess.clients.facebook import OAuth2FacebookClient
 from socialaccess.clients.google import OAuth2GoogleClient
 from socialaccess.clients.linkedin import OAuth2LinkedInClient
+from socialaccess.clients.github import OAuth2GitHubClient
 
 
 class FacebookViewMixin(object):
@@ -46,5 +47,20 @@ class LinkedinViewMixin(object):
         profile_url = getattr(settings, 'LINKEDIN_PROFILE_URL')
         callback_uri = 'socialaccess/linkedincallback'
         client = OAuth2LinkedInClient(app_key, app_secret, request_code_url, access_token_url, scope, callback_uri, profile_url)
+        return client
+
+
+class GithubViewMixin(object):
+    """
+    """
+    def get_oauth2_client(self):
+        app_key = getattr(settings, 'GITHUB_KEY')
+        app_secret = getattr(settings, 'GITHUB_SECRET')
+        request_code_url = getattr(settings, 'GITHUB_REQUEST_CODE_URL')
+        access_token_url  = getattr(settings, 'GITHUB_ACCESS_TOKEN_URL')
+        scope = getattr(settings, 'GITHUB_SCOPE')
+        profile_url = getattr(settings, 'GITHUB_PROFILE_URL')
+        callback_uri = 'socialaccess/githubcallback'
+        client = OAuth2GitHubClient(app_key, app_secret, request_code_url, access_token_url, scope, callback_uri, profile_url)
         return client
 

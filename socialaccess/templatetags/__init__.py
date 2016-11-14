@@ -21,6 +21,12 @@ PROVIDER_CONNECT_INFO = {
         'connect_button_cls': 'GOOGLE_CONNECT_CLASS',
         'connect_button_txt': 'GOOGLE_CONNECT_TEXT',
     },
+    'github': {
+        'connect_uri': 'github_connect',
+        'connect_button_img': 'GITHUB_CONNECT_IMAGE',
+        'connect_button_cls': 'GITHUB_CONNECT_CLASS',
+        'connect_button_txt': 'GITHUB_CONNECT_TEXT',
+    },
 }
 
 

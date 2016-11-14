@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, get_user_model
 from socialaccess.mixins import (
-    FacebookViewMixin, GoogleViewMixin, LinkedinViewMixin
+    FacebookViewMixin, GoogleViewMixin, LinkedinViewMixin, GithubViewMixin
 )
 
 
@@ -17,6 +17,7 @@ class AbstractOAuth2ConnectView(View):
     def get(self, request):
         oauth2_client = self.get_oauth2_client()
         authorize_url = oauth2_client.get_authorize_url()
+        request.session['state'] = oauth2_client.state
         return redirect(authorize_url)
 
 
@@ -25,31 +26,38 @@ class AbstractOAuth2CallbackView(View):
     """
     def get(self, request):
         oauth_verifier = request.GET.get('code')
-        error_message = request.GET.get('error_message')
-        
-        oauth2_client = self.get_oauth2_client()
-        
+
+        # CSRF check
+        if request.session['state'] != request.GET['state']:
+            return HttpResponse('The state param does not match!', status=401)
+        del request.session['state']
+
+        # Check if any error occured at the redirect step
+        error_message = request.GET.get('error_message') or request.GET.get('error_description')
         if error_message:
             return HttpResponse('An error occured on the callback step: {}'.format(error_message), status=400)
+
+        oauth2_client = self.get_oauth2_client()
 
         # Get the access token
         try:
             access_token = oauth2_client.get_access_token(oauth_verifier=oauth_verifier)
         except Exception as e:
-            return HttpResponse(e, status=400)
+            return HttpResponse(e, status=401)
 
-        # Get the user profile information
+        # Request the oauth provider API to get the user's profile info
         try:
-            # Request the oauth provider API to get the user's profile info
             user_data = oauth2_client.get_profile_info(access_token)
         except Exception as e:
-            return HttpResponse(e, status=400)
+            return HttpResponse(e, status=401)
 
         # Try to authenticate a user already registered with oauth
         user = oauth2_client.authenticate(user_data['id'])
 
         if user is None:
             try:
+                #TODO: hook for unavailable user profile fields
+
                 # Look for a user alreday registered without oauth
                 user = User.objects.get(email=user_data.get('email'))
                 
@@ -93,4 +101,12 @@ class LinkedinConnectView(AbstractOAuth2ConnectView, LinkedinViewMixin):
 
 
 class LinkedinCallbackView(AbstractOAuth2CallbackView, LinkedinViewMixin):
+    pass
+
+
+class GithubConnectView(AbstractOAuth2ConnectView, GithubViewMixin):
+    pass
+
+
+class GithubCallbackView(AbstractOAuth2CallbackView, GithubViewMixin):
     pass
