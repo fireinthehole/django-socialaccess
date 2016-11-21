@@ -23,8 +23,8 @@ class OAuth2FacebookClient(OAuth2Client):
             'id': user_data['id'],
         }
 
-    def create_profile(self, user_data, access_token):
-        FacebookProfile.create_profile(user_data, access_token)
-
     def authenticate(self, identifier):
         return authenticate(fb_id=identifier)
+
+    def get_model_class(self):
+        return FacebookProfile

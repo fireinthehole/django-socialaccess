@@ -38,8 +38,8 @@ class OAuth2GoogleClient(OAuth2Client):
             'id': user_data['id'],
         }
 
-    def create_profile(self, user_data, access_token):
-        GoogleProfile.create_profile(user_data, access_token)
-
     def authenticate(self, identifier):
         return authenticate(google_id=identifier)
+
+    def get_model_class(self):
+        return GoogleProfile

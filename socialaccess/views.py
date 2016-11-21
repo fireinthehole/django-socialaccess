@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.views.generic.base import View
 from django.shortcuts import redirect
 from django.http import HttpResponse
@@ -9,6 +10,8 @@ from socialaccess.mixins import (
 
 
 User = get_user_model()
+
+MERGE_ACCOUNTS = getattr(settings, 'SOCIALACCESS_MERGE_ACCOUNTS', False)
 
 
 class AbstractOAuth2ConnectView(View):
@@ -61,25 +64,62 @@ class AbstractOAuth2CallbackView(View):
                 # Look for a user alreday registered without oauth
                 user = User.objects.get(email=user_data.get('email'))
                 
-                # Refuse to authenticate if the user exists
-                return HttpResponse('User {id} already exists without social account association. Please authenticate using the login form.'.format(
-                    id=user_data.get('email')),
-                    status=400
-                )
+                if MERGE_ACCOUNTS:
+
+                    if user.has_usable_password():
+                        request.session['access_token'] = access_token
+                        auth_uri = getattr(settings, 'SOCIALACCESS_AUTH_REDIRECT')
+                        return redirect('{}?email={}&next={}'.format(auth_uri, user.email, self.merge_uri))
+                    else:
+                        # Create a new social account.
+                        # In this case we have one or more social accounts associated to an account who still has not set a password
+                        # Here no ordinal authentication could take place
+                        oauth2_client.create_profile(user_data, access_token)
+                        user = oauth2_client.authenticate(user_data['id'])
+                else:
+                    # Refuse to authenticate if the user exists
+                    return HttpResponse('User {id} already exists without social account association. Please authenticate using the login form.'.format(
+                        id=user_data.get('email')),
+                        status=400
+                    )
             except User.DoesNotExist:
                 # Create a new account with social account association
                 oauth2_client.create_profile(user_data, access_token)
                 user = oauth2_client.authenticate(user_data['id'])
 
         # Update the user access_token
-        if user.oauth_user.oauth_token != access_token:
-            user.oauth_user.oauth_token = access_token
-            user.oauth_user.save()
+        oauth2_client.update_access_token(user.email, access_token)
 
         login(request, user)
         return redirect('/')
 
 
+class AbstractMergeAccountView(View):
+    """
+    """
+    def get(self, request):
+        """
+        """
+        if not MERGE_ACCOUNTS:
+            return HttpResponse('Profile merge is not allowed', status=401)
+
+        if request.user.is_authenticated():
+            access_token = request.session['access_token']
+            oauth2_client = self.get_oauth2_client()
+            del request.session['access_token']
+
+            # Request the oauth provider API to get the user's profile info
+            try:
+                user_data = oauth2_client.get_profile_info(access_token)
+                oauth2_client.create_profile(user_data, access_token)
+                return redirect('/')
+            except Exception as e:
+                return HttpResponse(e, status=401)
+        return HttpResponse(status=403)
+
+
+
+# Facebook views
 class FacebookConnectView(AbstractOAuth2ConnectView, FacebookViewMixin):
     pass
 
@@ -88,6 +128,11 @@ class FacebookCallbackView(AbstractOAuth2CallbackView, FacebookViewMixin):
     pass
 
 
+class FacebookMergeView(AbstractMergeAccountView, FacebookViewMixin):
+    pass
+
+
+# Google views
 class GoogleConnectView(AbstractOAuth2ConnectView, GoogleViewMixin):
     pass
 
@@ -96,6 +141,11 @@ class GoogleCallbackView(AbstractOAuth2CallbackView, GoogleViewMixin):
     pass
 
 
+class GoogleMergeView(AbstractMergeAccountView, GoogleViewMixin):
+    pass
+
+
+# Linkedin views
 class LinkedinConnectView(AbstractOAuth2ConnectView, LinkedinViewMixin):
     pass
 
@@ -104,9 +154,18 @@ class LinkedinCallbackView(AbstractOAuth2CallbackView, LinkedinViewMixin):
     pass
 
 
+class LinkedinMergeView(AbstractMergeAccountView, LinkedinViewMixin):
+    pass
+
+
+# Github views
 class GithubConnectView(AbstractOAuth2ConnectView, GithubViewMixin):
     pass
 
 
 class GithubCallbackView(AbstractOAuth2CallbackView, GithubViewMixin):
+    pass
+
+
+class GithubMergeView(AbstractMergeAccountView, GithubViewMixin):
     pass

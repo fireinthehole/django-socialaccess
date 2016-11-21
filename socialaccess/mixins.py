@@ -18,6 +18,10 @@ class FacebookViewMixin(object):
         callback_uri = 'socialaccess/fbcallback'
         client = OAuth2FacebookClient(app_key, app_secret, request_code_url, access_token_url, scope, callback_uri, profile_url)
         return client
+
+    @property
+    def merge_uri(self):
+        return '/socialaccess/fbmerge'
     
 
 class GoogleViewMixin(object):
@@ -34,6 +38,10 @@ class GoogleViewMixin(object):
         client = OAuth2GoogleClient(app_key, app_secret, request_code_url, access_token_url, scope, callback_uri, profile_url)
         return client
 
+    @property
+    def merge_uri(self):
+        return '/socialaccess/googlemerge'
+
 
 class LinkedinViewMixin(object):
     """
@@ -49,6 +57,10 @@ class LinkedinViewMixin(object):
         client = OAuth2LinkedInClient(app_key, app_secret, request_code_url, access_token_url, scope, callback_uri, profile_url)
         return client
 
+    @property
+    def merge_uri(self):
+        return '/socialaccess/linkedinmerge'
+
 
 class GithubViewMixin(object):
     """
@@ -63,4 +75,8 @@ class GithubViewMixin(object):
         callback_uri = 'socialaccess/githubcallback'
         client = OAuth2GitHubClient(app_key, app_secret, request_code_url, access_token_url, scope, callback_uri, profile_url)
         return client
+
+    @property
+    def merge_uri(self):
+        return '/socialaccess/githubmerge'
 

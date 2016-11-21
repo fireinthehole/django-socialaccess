@@ -165,3 +165,7 @@ GITHUB_SECRET = 'fb00835373875fbc6482aeb041e29d2b965ad95f'
 GITHUB_CONNECT_CLASS = 'btn btn-github btn-block fa fa-github'
 GITHUB_CONNECT_TEXT = ' Connect with GitHub'
 GITHUB_SCOPE = 'r_basicprofile r_emailaddress'
+
+SOCIALACCESS_MERGE_ACCOUNTS = True
+SOCIALACCESS_AUTH_REDIRECT = '/authuser'
+

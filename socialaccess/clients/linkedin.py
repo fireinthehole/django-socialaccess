@@ -31,9 +31,8 @@ class OAuth2LinkedInClient(OAuth2Client):
             'id': user_data['id'],
         }
 
-    def create_profile(self, user_data, access_token):
-        LinkedinProfile.create_profile(user_data, access_token)
-
     def authenticate(self, identifier):
         return authenticate(linkedin_id=identifier)
 
+    def get_model_class(self):
+        return LinkedinProfile

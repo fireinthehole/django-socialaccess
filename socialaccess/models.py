@@ -31,13 +31,17 @@ class ProfileModelMixin(object):
                 uid = user_data.get('id')
 
                 user_cls = get_user_model()
-                user = user_cls(
-                    email = email, 
-                    first_name = first_name,
-                    last_name = last_name,
-                    username = username,
-                )
-                user.save()
+
+                try:
+                    user = user_cls.objects.get(email=email)
+                except user_cls.DoesNotExist:  
+                    user = user_cls(
+                        email = email, 
+                        first_name = first_name,
+                        last_name = last_name,
+                        username = email,
+                    )
+                    user.save()
 
                 profile = cls(
                     user = user, 
@@ -55,7 +59,7 @@ class OAuthProfile(models.Model):
     """
     Base model for social profiles
     """
-    user = models.OneToOneField(UserProfile, related_name='oauth_user')
+    user = models.ForeignKey(UserProfile, related_name='oauth_users')
     site = models.ForeignKey(Site, default=settings.SITE_ID)
     oauth_token = models.CharField(max_length=2048)
 

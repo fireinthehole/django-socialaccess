@@ -17,11 +17,12 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from socialaccess.urls import urlpatterns as oauth_urls
-from demo_oauth.views import Home, Logout
+from demo_oauth.views import Home, Logout, AuthUser
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^logout/', Logout.as_view(), name='logout'),
+    url(r'^authuser/', AuthUser.as_view(), name='authuser'),
     url(r'^$', Home.as_view(), name='home'),
 
     # django-socialaccess urls

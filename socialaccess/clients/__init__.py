@@ -75,3 +75,17 @@ class OAuth2Client(object):
         if status != 200:
             raise Exception(content)
         return json.loads(content)
+
+    def get_model_class(self):
+        raise NotImplementedError('Please Implement this method')
+
+    def create_profile(self, user_data, access_token):
+        model_cls = self.get_model_class()
+        model_cls.create_profile(user_data, access_token)
+
+    def update_access_token(self, email, access_token):
+        model_cls = self.get_model_class()
+        extended_user = model_cls.objects.get(user__email=email)
+        if extended_user.oauth_token != access_token:
+            extended_user.oauth_token = access_token
+            extended_user.save()
