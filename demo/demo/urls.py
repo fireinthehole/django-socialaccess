@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-
 from socialaccess.urls import urlpatterns as oauth_urls
 from demo_oauth.views import Home, Logout, AuthUser
+
+
+# handler400 = 'demo.views.my_handler400'
+# handler403 = 'demo.views.my_handler403'
+# handler404 = 'demo.views.my_handler404'
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,3 +32,4 @@ urlpatterns = [
     # django-socialaccess urls
     url(r'^socialaccess/', include(oauth_urls), name='socialaccess'),
 ]
+

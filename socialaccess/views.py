@@ -58,6 +58,7 @@ class AbstractOAuth2CallbackView(View):
         user = oauth2_client.authenticate(user_data['id'])
 
         if user is None:
+            # User does not exist
             try:
                 #TODO: hook for unavailable user profile fields
 
@@ -65,19 +66,22 @@ class AbstractOAuth2CallbackView(View):
                 user = User.objects.get(email=user_data.get('email'))
                 
                 if MERGE_ACCOUNTS:
-
+                    # Create a new social account.
                     if user.has_usable_password():
+                        # Store the access token in the session
+                        # Redirect the user to an ordinal authentication page
+                        # On success the user should be redirected to the account merge url 
+                        # where the new social account association is taking place using the previously session stored access_token
                         request.session['access_token'] = access_token
                         auth_uri = getattr(settings, 'SOCIALACCESS_AUTH_REDIRECT')
                         return redirect('{}?email={}&next={}'.format(auth_uri, user.email, self.merge_uri))
                     else:
-                        # Create a new social account.
                         # In this case we have one or more social accounts associated to an account who still has not set a password
                         # Here no ordinal authentication could take place
                         oauth2_client.create_profile(user_data, access_token)
                         user = oauth2_client.authenticate(user_data['id'])
                 else:
-                    # Refuse to authenticate if the user exists
+                    # Refuse to authenticate if an account using the same email already exists
                     return HttpResponse('User {id} already exists without social account association. Please authenticate using the login form.'.format(
                         id=user_data.get('email')),
                         status=400
@@ -116,7 +120,6 @@ class AbstractMergeAccountView(View):
             except Exception as e:
                 return HttpResponse(e, status=401)
         return HttpResponse(status=403)
-
 
 
 # Facebook views

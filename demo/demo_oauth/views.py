@@ -31,7 +31,7 @@ class Logout(View):
 
 class AuthUser(View):
     """
-        Login user before merging accounts
+        Login user before merging social accounts
     """
     form_class = LoginForm 
     template_name = 'authuser.tpl'
@@ -44,7 +44,7 @@ class AuthUser(View):
             return redirect(dest)
         else:
             form = self.form_class(initial={'login': email, 'next': dest})
-            return render(request, self.template_name, {'form': form, 'success':success })
+            return render(request, self.template_name, {'form': form, 'success': success })
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)

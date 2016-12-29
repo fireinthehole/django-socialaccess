@@ -119,3 +119,21 @@ Configuration
 
   ``/socialaccess/githubcallback``
 
+
+Merging multiple OAuth accounts
+===============================
+
+If you need this option, you should set two additional variables to your project ``settings.py`` and implement a password login form page. 
+
+  ``SOCIALACCESS_MERGE_ACCOUNTS = True``
+
+  ``SOCIALACCESS_AUTH_REDIRECT = /your_user_auth_url``
+
+Users can authenticate using multiple OAuth providers. This kind of authentication is possible if a user have the same email for each OAuth provider account. 
+
+In this case a new extended profile is being created per provider and associated with the primary user account.
+
+An additional intermediate authentication by password should take place in the OAuth flow to ensure the user identity. While authenticating by a new OAuth provider for the very first time, the user is redirected to an ordinal login form just after acquiring the OAuth token. This is the social account association step and occurs only once. Each ulterior authentication is carried out directly.
+
+For this purpose your should implement an ordinal login page.
+On successful login the user should be redirected to the request.GET['next'] value so that the ``django-socialaccess`` OAuth flow may terminate correctly.
