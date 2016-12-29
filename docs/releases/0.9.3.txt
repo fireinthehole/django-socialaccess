@@ -1,0 +1,15 @@
+=================================
+django-socialaccess release notes
+=================================
+
+* 29 December 2016
+
+django-socialaccess 0.9.3 fixes the following issues in 0.9.2
+
+Added new feature for multiple social profiles association
+==========================================================
+A user may want to authenticate using multiple oauth providers. This kind of authentication is now possible if the user have the same email for each oauth provider. As a result a new extended profile is created per provider and is associated with the primary user account.
+To activate this feature, the SOCIALACCESS_MERGE_ACCOUNTS variable should be set to True in your project settings.py
+An intermediate authentication by password is added to the oauth flow to ensure the user identity.
+While authenticating with a new oauth provider for the very first time, the user is redirected to an ordinal login form page where he types his password. This is the social account association step and occurs only once. For this purpose your should implement an ordinal login page and set the variable SOCIALACCESS_AUTH_REDIRECT to its url in your project settings.py
+In your login view, on successful login you should redirect the user to the request.GET['next'] value.
