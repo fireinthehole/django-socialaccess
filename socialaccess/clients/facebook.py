@@ -1,4 +1,4 @@
-from urllib.parse import parse_qs
+import json
 from django.contrib.auth import authenticate
 from socialaccess.clients import OAuth2Client
 from socialaccess.models import FacebookProfile
@@ -8,9 +8,10 @@ class OAuth2FacebookClient(OAuth2Client):
     """
     """
     def _prepare_profile_info_params(self, access_token):
+        token = json.loads(access_token)
         return {
             'fields': 'id,email,first_name,last_name',
-            'access_token': parse_qs(access_token).get('access_token')[0],
+            'access_token': token['access_token'],
         }
 
     def get_profile_info(self, access_token):

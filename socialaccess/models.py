@@ -22,16 +22,16 @@ class ProfileModelMixin(object):
         """
         site = Site.objects.get_current()
 
+        first_name = user_data.get('first_name')
+        last_name = user_data.get('last_name')
+        email = user_data.get('email')
+        username = user_data.get('username')
+        uid = user_data.get('id')
+
+        user_cls = get_user_model()
+
         try:
             with transaction.atomic():
-                first_name = user_data.get('first_name')
-                last_name = user_data.get('last_name')
-                email = user_data.get('email')
-                username = user_data.get('username')
-                uid = user_data.get('id')
-
-                user_cls = get_user_model()
-
                 try:
                     user = user_cls.objects.get(email=email)
                 except user_cls.DoesNotExist:  
@@ -71,7 +71,7 @@ class FacebookProfile(OAuthProfile, ProfileModelMixin):
 
     @property
     def access_token(self):
-    	return parse_qs(self.oauth_token).get('access_token')[0]
+        return json.loads(self.oauth_token).get('access_token')
 
 
 class GoogleProfile(OAuthProfile, ProfileModelMixin):

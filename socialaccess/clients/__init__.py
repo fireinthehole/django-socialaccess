@@ -2,7 +2,7 @@ import json
 import random
 import string
 import urllib.request
-from urllib.parse import urlparse, urlencode, quote
+from urllib.parse import urlencode
 from django.conf import settings
 from django.contrib.sites.models import Site
 
