@@ -5,9 +5,6 @@ from socialaccess.clients import OAuth2Client
 from socialaccess.models import GithubProfile
 
 
-site = Site.objects.get_current()
-
-
 class OAuth2GitHubClient(OAuth2Client):
     """
     """
@@ -27,6 +24,7 @@ class OAuth2GitHubClient(OAuth2Client):
         user_data = super().get_profile_info(access_token)
         name = user_data['name'].split(' ')
         first_name, last_name = name[0:2] if len(name) == 2 else (name[0], '')
+        site = Site.objects.get_current()
         return {
             'email': user_data['email'] or 'github_{id}@{domain}'.format(id=user_data['id'], domain=site.name),
             'username': user_data['id'],
