@@ -9,9 +9,9 @@ AUTHENTICATION_BACKENDS    += [
                                 'socialaccess.auth.backends.OAuthGithubBackend',
                              ]
 
-FACEBOOK_REQUEST_CODE_URL  = 'https://www.facebook.com/dialog/oauth'
-FACEBOOK_ACCESS_TOKEN_URL  = 'https://graph.facebook.com/oauth/access_token'
-FACEBOOK_PROFILE_URL       = 'https://graph.facebook.com/me'
+FACEBOOK_REQUEST_CODE_URL  = 'https://www.facebook.com/v2.8/dialog/oauth'
+FACEBOOK_ACCESS_TOKEN_URL  = 'https://graph.facebook.com/v2.8/oauth/access_token'
+FACEBOOK_PROFILE_URL       = 'https://graph.facebook.com/v2.8/me'
 FACEBOOK_SCOPE             = 'public_profile,email'
 
 GOOGLE_REQUEST_CODE_URL    = 'https://accounts.google.com/o/oauth2/auth'
