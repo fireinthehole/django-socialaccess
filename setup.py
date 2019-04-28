@@ -15,7 +15,7 @@ setup(
     description = 'Django client for oauth2 profiders',
     long_description = read('README.rst'),
     author = 'Damian Daskalov',
-    author_email = 'daskalov.damian@gmail.com',
+    author_email = 'oh_batko_batko@yahoo.fr',
     packages = find_packages(),
     include_package_data = True,
     install_requires = [
